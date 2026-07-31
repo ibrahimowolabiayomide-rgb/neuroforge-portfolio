@@ -1,7 +1,7 @@
-{
+﻿{
   "name": "neuroforge-portfolio",
   "version": "2.0.0",
-  "description": "Ibrahim Owolabi — Neuroforge Portfolio: a premium, animated, production-grade full-stack developer portfolio built with vanilla HTML/CSS/JS and an Express static server.",
+  "description": "Ibrahim Owolabi â€” Neuroforge Portfolio: a premium, animated, production-grade full-stack developer portfolio built with vanilla HTML/CSS/JS and an Express static server.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/ibrahimowolabiayomide-rgb/neuroforge-portfolio.git"
   },
-  "homepage": "https://neuroforge-portfolio.onrender.com/",
+  "homepage": "https://neuroforge-portfolio.vercel.app/",
   "bugs": {
     "url": "https://github.com/ibrahimowolabiayomide-rgb/neuroforge-portfolio/issues"
   },
