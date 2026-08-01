@@ -55,22 +55,24 @@ const SKILLS = {
 
 const PROJECTS = [
   {
-    id: 'next-build',
-    title: 'Your Next Build',
-    year: '—',
-    cats: ['fullstack'],
-    live: false,
-    placeholder: true,
-    short: 'Reserved slot for the next shipped project — swap this card out first.',
-    desc: 'This card is a clearly-marked placeholder, not a real shipped project. Replace it with your next case study — problem, build, and outcome — as soon as it\'s ready to show.',
+    id: 'imperial-shelter-tech',
+    title: 'Imperial Shelter-Tech Konsult',
+    year: '2026',
+    cats: ['fullstack', 'frontend'],
+    live: true,
+    short: 'A full-service marketing site for a Nigerian perimeter security & architectural consultancy — built to turn visitors into WhatsApp leads.',
+    desc: 'Imperial Shelter-Tech Konsult is an Ibadan-based perimeter security and architectural consultancy — rigid panel mesh fencing, solar-powered electric fences, CCTV, and full architectural design and construction, serving clients across Oyo State and beyond. I built their public-facing website: a fast, multi-page site with dedicated service pages, a filterable project portfolio, a blog, and a WhatsApp-first contact flow that turns visitors straight into pre-filled chat leads — the channel their sales process actually runs on.',
     features: [
-      'Swap this copy for a real problem statement and outcome',
-      'Add 3–6 concrete features or technical highlights',
-      'Link a live demo and/or public repo when available'
+      'Six dedicated service pages (fencing, solar electric fence, CCTV, architecture, land surveying) each with its own free-quote CTA',
+      'One-tap WhatsApp lead capture with a pre-filled message, plus a scannable QR code for in-person and print use',
+      'Dynamic project portfolio with individual case-study pages for completed builds',
+      'Company blog and client-testimonials section for SEO and trust-building',
+      'Cloudinary-powered image and video pipeline for fast-loading, high-resolution site photography and footage',
+      'Full on-page SEO: structured metadata, Open Graph tags, and per-page titles and descriptions'
     ],
-    tags: ['Add', 'Your', 'Stack'],
-    img: 'assets/img/projects/placeholder-project.jpg',
-    demo: '#',
+    tags: ['Next.js', 'Vercel', 'Cloudinary', 'SEO', 'WhatsApp Integration', 'Responsive Design'],
+    img: 'assets/img/projects/imperial-shelter-tech.jpg',
+    demo: 'https://imperial-shelter-tech.vercel.app/',
     repo: '#'
   },
   {
