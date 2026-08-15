@@ -1,6 +1,6 @@
-# Neuroforge — Ibrahim Owolabi's Developer Portfolio
+# Neuroforge — Ibrahim Owolabi's Developer Portfolio (V2)
 
-A premium, animated, production-grade personal portfolio built with vanilla HTML, CSS, and JavaScript — no framework, no build step. Dark "industrial forge" aesthetic with a full light-mode theme, an animated canvas hero, filterable project showcase, interactive skills panel, and a working contact form.
+A professional, technology-platform-style personal portfolio built with vanilla HTML, CSS, and JavaScript — no framework, no build step. Deep-navy / electric-blue visual identity, real projects only (no placeholder or fictional work), and a data-driven content layer.
 
 **Live site:** https://neuroforge-portfolio.vercel.app/
 **Author:** Ibrahim Owolabi ([@ibrahimowolabiayomide-rgb](https://github.com/ibrahimowolabiayomide-rgb))
@@ -9,15 +9,14 @@ A premium, animated, production-grade personal portfolio built with vanilla HTML
 
 ## ✨ Features
 
-- Animated canvas particle field in the hero, fully respecting `prefers-reduced-motion`
+- Blue technology-platform visual identity — no particle canvas, a calm dot-grid field and a soft cursor-follow glow instead
 - Dark / light theme toggle with `localStorage` persistence and OS-preference detection
-- Filterable, keyboard-accessible project grid with a detail modal (focus-trapped, `Escape`-to-close)
-- Interactive skills panel using the full WAI-ARIA tablist pattern (arrow-key navigation, roving tabindex)
-- Auto-advancing testimonial carousel that pauses on hover/focus and supports touch swipe
+- Real project showcase only: client work and in-development products, each clearly status-labelled (`Client Project` / `Under Development`) — filterable, keyboard-accessible grid with a detail modal (focus-trapped, `Escape`-to-close)
+- First-visit "Currently Building" notice, localStorage-gated (shows once), dismissible, driven entirely by data so a shipped product can be removed from the notice with a one-line edit
+- Interactive technology-stack panel using the full WAI-ARIA tablist pattern (arrow-key navigation, roving tabindex) — no invented proficiency percentages
 - Contact form wired to [FormSubmit](https://formsubmit.co/) — no backend required
-- WebP images with automatic JPEG fallback via `<picture>`
-- WCAG AA color contrast across both themes, skip link, visible focus states throughout
-- SEO: structured data (JSON-LD), Open Graph/Twitter cards, `sitemap.xml`, `robots.txt`
+- WCAG AA color contrast across both themes, skip link, visible focus states throughout, `prefers-reduced-motion` respected everywhere
+- SEO: structured data (JSON-LD), Open Graph/Twitter cards, `sitemap.xml`, `robots.txt`, all pointing at the live Vercel URL
 
 ## 🧱 Tech Stack
 
@@ -26,34 +25,39 @@ A premium, animated, production-grade personal portfolio built with vanilla HTML
 | Markup | Semantic HTML5 |
 | Styling | Vanilla CSS3 (custom properties, Grid, Flexbox — no preprocessor) |
 | Behavior | Vanilla JavaScript (ES6+, no framework) |
-| Server | [Express](https://expressjs.com/) (static file serving only) |
-| Fonts | Bebas Neue, Space Grotesk, JetBrains Mono (Google Fonts) |
+| Server (local dev) | [Express](https://expressjs.com/) (static file serving only) |
+| Hosting | [Vercel](https://vercel.com/) (static site — see `vercel.json`) |
+| Fonts | Manrope, Inter, JetBrains Mono (Google Fonts) |
 
 ## 📁 Project Structure
 
 ```
 neuroforge-portfolio/
-├── index.html              # All markup — single-page site
-├── server.js                # Express static server
+├── index.html               # All markup — single-page site
+├── server.js                 # Express static server (local dev only)
+├── vercel.json                # Forces pure static-site serving on Vercel
 ├── package.json
 ├── sitemap.xml
 ├── robots.txt
 ├── css/
-│   ├── tokens.css           # Design tokens: colors, type, spacing, shadows
-│   ├── base.css              # Resets, buttons, layout primitives
+│   ├── tokens.css            # Design tokens: colors, type, spacing, shadows
+│   ├── base.css               # Resets, buttons, layout primitives
 │   ├── nav.css
 │   ├── hero.css
 │   ├── about.css
-│   ├── skills.css
+│   ├── services.css
+│   ├── stack.css              # Technology stack chip grid
 │   ├── projects.css
-│   └── sections.css         # Experience, certs, achievements, blog, testimonials, contact, footer
+│   ├── process.css
+│   ├── sections.css           # Timeline, certs, why-work-with-me, contact, footer
+│   └── notification.css       # First-visit "Currently Building" notice
 ├── js/
-│   ├── data.js               # Content: projects, skills, icons — no logic
-│   └── main.js               # All interactivity
+│   ├── data.js                 # Content: projects, skills, services, process — no logic
+│   └── main.js                 # All interactivity
 └── assets/img/
     ├── portrait.jpg / .webp
     ├── og-cover.jpg
-    └── projects/*.jpg / *.webp
+    └── projects/                # Veyra + Amoura logos; Imperial Shelter Tech uses its own live Cloudinary URLs
 ```
 
 ## 🚀 Getting Started
@@ -79,18 +83,14 @@ npm run dev
 ## 🖊️ Customizing Content
 
 Almost all editable content lives in **`js/data.js`** — no HTML editing required for:
-- Project cards (`PROJECTS` array) — title, description, tags, images, live/repo links
-- Skills (`SKILLS` object) — grouped by category with proficiency percentages
-
-To swap the placeholder project slot for a real project, edit the first entry in `PROJECTS` in `js/data.js` and replace `assets/img/projects/placeholder-project.jpg` with your own screenshot (recommended: 1280×800, optimized JPEG + a matching `.webp`).
+- Project cards (`PROJECTS` array) — title, description, tags, images/logos, live links, status (`client` / `development`)
+- Technology stack (`SKILLS` object) — grouped by category
+- Services (`SERVICES`), development process (`PROCESS`), and "why work with me" points (`WHY_POINTS`)
+- The first-visit build notice (`BUILDING_NOW` array) — set a product's `active` flag to `false` once it ships
 
 ## 🌐 Deployment
 
-This is a static Node/Express app — deploy anywhere that runs Node (Render, Railway, Fly.io, a VPS, etc.):
-
-1. Push this repo to GitHub.
-2. On your host, set the start command to `npm start` (or `node server.js`).
-3. No environment variables are required for the base site. The contact form posts directly to FormSubmit from the browser.
+Deployed as a static site on Vercel. `vercel.json` forces `framework: null` because Vercel otherwise misdetects this as an Express server project and tries to run a build. For local development, `server.js` provides a minimal Express static server.
 
 ## 📄 License
 

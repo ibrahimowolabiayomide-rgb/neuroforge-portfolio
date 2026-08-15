@@ -6,9 +6,9 @@ h1,h2,h3,h4{ margin:0; font-weight:400; }
 
 .h-display{
   font-family:var(--font-display);
-  letter-spacing:.01em;
-  line-height:.92;
-  text-transform:uppercase;
+  font-weight:800;
+  letter-spacing:-.01em;
+  line-height:1.04;
 }
 
 .section{
@@ -43,14 +43,15 @@ h1,h2,h3,h4{ margin:0; font-weight:400; }
   .section-head{ flex-direction:column; align-items:flex-start; gap:var(--space-3); }
 }
 
-/* weld-seam divider: the signature motif used between major sections */
-.weld-seam{
+/* signal-line divider: the signature motif used between major sections —
+   a quiet pulse of light travelling a hairline, like a status readout. */
+.signal-line{
   position:relative;
-  height:2px;
+  height:1px;
   background:var(--border);
   overflow:hidden;
 }
-.weld-seam::after{
+.signal-line::after{
   content:'';
   position:absolute;
   top:0; left:-30%;
@@ -58,11 +59,14 @@ h1,h2,h3,h4{ margin:0; font-weight:400; }
   height:100%;
   background:linear-gradient(90deg,transparent,var(--accent),var(--accent-2),transparent);
   filter:blur(.3px);
-  animation:weld-travel 5.5s linear infinite;
+  animation:signal-travel 6.5s linear infinite;
 }
-@keyframes weld-travel{
+@keyframes signal-travel{
   0%{ left:-30%; }
   100%{ left:100%; }
+}
+@media (prefers-reduced-motion: reduce){
+  .signal-line::after{ animation:none; left:0; width:100%; opacity:.5; }
 }
 
 .btn{
@@ -91,15 +95,14 @@ h1,h2,h3,h4{ margin:0; font-weight:400; }
 .btn-primary{
   background:var(--accent);
   border-color:var(--accent);
-  color:#0A0B0D;
-  box-shadow:0 1px 0 rgba(255,255,255,.12) inset, var(--shadow-sm);
+  color:#fff;
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset, var(--shadow-sm);
 }
 .btn-primary:hover{
-  background:var(--ink); border-color:var(--ink); color:var(--bg);
+  background:var(--blue-bright); border-color:var(--blue-bright); color:#fff;
   transform:translateY(-2px);
   box-shadow:var(--shadow-accent);
 }
-[data-theme="light"] .btn-primary:hover{ background:#14161A; color:#F2F0EA; }
 
 .btn-ghost:hover{
   border-color:var(--accent-2);
@@ -122,7 +125,7 @@ h1,h2,h3,h4{ margin:0; font-weight:400; }
 }
 .is-shaking{
   animation:btn-shake .5s var(--ease-in-out);
-  border-color:var(--amber) !important;
+  border-color:var(--danger) !important;
 }
 .is-loading{
   opacity:.7;

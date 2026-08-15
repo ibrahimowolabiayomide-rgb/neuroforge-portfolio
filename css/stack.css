@@ -1,0 +1,116 @@
+/* ============================================
+   TECHNOLOGY STACK
+   Tabbed categories, chip-grid presentation.
+   No proficiency percentages — unverifiable
+   precision reads as inflated on a platform site.
+   ============================================ */
+
+.skills-layout{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:var(--space-6);
+}
+@media (max-width:780px){
+  .skills-layout{ grid-template-columns:1fr; }
+}
+
+.skill-tabs{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  position:sticky;
+  top:110px;
+  align-self:start;
+}
+@media (max-width:780px){
+  .skill-tabs{
+    position:static;
+    flex-direction:row;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:4px;
+  }
+}
+.skill-tab{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  text-align:left;
+  padding:14px 16px;
+  background:none;
+  border:none;
+  border-left:2px solid var(--border);
+  color:var(--text-faint);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  white-space:nowrap;
+  transition:color .25s, border-color .25s, background .25s;
+}
+.skill-tab .count{ font-size:10px; opacity:.6; transition:opacity .25s; }
+.skill-tab:hover{ color:var(--text); background:color-mix(in srgb, var(--bg-raised) 60%, transparent); }
+.skill-tab.is-active{
+  color:var(--accent-text);
+  border-left-color:var(--accent);
+  background:var(--bg-raised);
+}
+.skill-tab.is-active .count{ opacity:1; color:var(--accent-text); }
+@media (max-width:780px){
+  .skill-tab{ border-left:none; border-bottom:2px solid var(--border); }
+  .skill-tab.is-active{ border-bottom-color:var(--accent); }
+}
+
+.skill-panel{ display:none; }
+.skill-panel.is-active{
+  display:block;
+  animation:skill-panel-in .45s var(--ease-out);
+}
+@keyframes skill-panel-in{
+  from{ opacity:0; transform:translateY(8px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .skill-panel.is-active{ animation:none; }
+}
+
+.skill-chip-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+@media (max-width:560px){
+  .skill-chip-grid{ grid-template-columns:1fr; }
+}
+.skill-chip{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:var(--bg-raised);
+  transition:transform .3s var(--ease-out), border-color .3s var(--ease-out), background .3s var(--ease-out);
+}
+.skill-chip:hover{
+  transform:translateY(-2px);
+  border-color:color-mix(in srgb, var(--accent) 40%, var(--steel-line));
+  background:color-mix(in srgb, var(--accent) 5%, var(--bg-raised));
+}
+@media (prefers-reduced-motion: reduce){
+  .skill-chip:hover{ transform:none; }
+}
+.skill-chip svg{
+  width:18px; height:18px; flex-shrink:0; color:var(--accent);
+  padding:8px; box-sizing:content-box;
+  background:color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius:var(--radius-sm);
+  transition:transform .3s var(--ease-spring), background .3s;
+}
+.skill-chip:hover svg{
+  transform:scale(1.08) rotate(-4deg);
+  background:color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.skill-chip span{ font-size:14.5px; font-weight:500; color:var(--text); }

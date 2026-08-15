@@ -127,10 +127,11 @@
   display:flex; align-items:center; gap:6px;
 }
 .about-portrait-tag .status .dot{
-  width:6px;height:6px;border-radius:50%;background:var(--cyan);
+  width:6px;height:6px;border-radius:50%;background:var(--live);
 }
 
-.stat-band{
+/* Fact band — qualitative, verifiable context. No invented statistics. */
+.fact-band{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   border:1px solid var(--border);
@@ -138,24 +139,22 @@
   overflow:hidden;
   margin-top:var(--space-7);
 }
-.stat-card{
+.fact-card{
   padding:var(--space-4) var(--space-3);
   border-right:1px solid var(--border);
   position:relative;
   transition:background .35s var(--ease-out);
 }
-.stat-card:last-child{ border-right:none; }
-.stat-card:hover{ background:color-mix(in srgb, var(--accent) 6%, transparent); }
-.stat-card .stat-num{
+.fact-card:last-child{ border-right:none; }
+.fact-card:hover{ background:color-mix(in srgb, var(--accent) 6%, transparent); }
+.fact-card .fact-val{
   font-family:var(--font-display);
-  font-size:clamp(36px,5vw,56px);
+  font-weight:800;
+  font-size:clamp(18px,2.1vw,22px);
   color:var(--text);
-  display:flex;
-  align-items:baseline;
-  gap:4px;
+  letter-spacing:-.005em;
 }
-.stat-card .stat-num .plus{ color:var(--accent); font-size:.55em; }
-.stat-card .stat-lbl{
+.fact-card .fact-lbl{
   font-family:var(--font-mono);
   font-size:11px;
   letter-spacing:.05em;
@@ -164,7 +163,7 @@
   margin-top:6px;
 }
 @media (max-width:680px){
-  .stat-band{ grid-template-columns:repeat(2,1fr); }
-  .stat-card:nth-child(2){ border-right:none; }
-  .stat-card:nth-child(1),.stat-card:nth-child(2){ border-bottom:1px solid var(--border); }
+  .fact-band{ grid-template-columns:repeat(2,1fr); }
+  .fact-card:nth-child(2){ border-right:none; }
+  .fact-card:nth-child(1),.fact-card:nth-child(2){ border-bottom:1px solid var(--border); }
 }

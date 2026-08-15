@@ -1,7 +1,8 @@
 /* ============================================
    NEUROFORGE — CONTENT DATA
-   Skills + Projects, separated from logic so
-   content can be edited without touching main.js
+   Skills + Projects + Services + Process, separated
+   from logic so content can be edited without
+   touching main.js
    ============================================ */
 
 const ICONS = {
@@ -21,177 +22,203 @@ const ICONS = {
   git: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8 17.5c3-1 4-3 4-5.5h3.5"/></svg>',
   brain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 4a3 3 0 00-3 3 3 3 0 00-2 5 3 3 0 002 5 3 3 0 003 3 3 3 0 003-3V7a3 3 0 00-3-3z"/><path d="M15 4a3 3 0 013 3 3 3 0 012 5 3 3 0 01-2 5 3 3 0 01-3 3 3 3 0 01-3-3"/></svg>',
   wand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M17.8 6.2L19 5M12.2 6.2L11 5M3 21l9-9"/></svg>',
+  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 6 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-6-3.8-9s1.3-6.3 3.8-9z"/></svg>',
+  stack: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="16" width="16" height="4" rx="1"/></svg>',
+  cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.7 12.6a2 2 0 002 1.6h8.5a2 2 0 002-1.6L21 7H6"/></svg>',
+  compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-4 2 2-6z"/></svg>',
+  ruler: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v6H4z"/><path d="M8 4v3M12 4v3M16 4v3"/></svg>',
+  rocket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2c3 1 5 4 5 8 0 3-1.5 6-5 10-3.5-4-5-7-5-10 0-4 2-7 5-8z"/><circle cx="12" cy="9" r="1.6"/><path d="M8 16l-3 4M16 16l3 4"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l5 5L20 6"/></svg>',
 };
 
+/* Company founded 2020 — used to compute a genuine, always-accurate
+   "years building" figure instead of a hardcoded stat. */
+const FOUNDING_YEAR = 2020;
+
+/* ---------- TECHNOLOGY STACK ----------
+   Real technologies only, grouped by category. No proficiency
+   percentages — those can't be verified and read as inflated. */
 const SKILLS = {
   frontend: [
-    { name: 'React', pct: 95, icon: ICONS.react },
-    { name: 'Next.js', pct: 92, icon: ICONS.layers },
-    { name: 'JavaScript / TypeScript', pct: 94, icon: ICONS.code },
-    { name: 'GSAP / Three.js / WebGL', pct: 88, icon: ICONS.bolt },
+    { name: 'React', icon: ICONS.react },
+    { name: 'Next.js', icon: ICONS.layers },
+    { name: 'TypeScript / JavaScript', icon: ICONS.code },
+    { name: 'GSAP / Three.js', icon: ICONS.bolt },
   ],
   backend: [
-    { name: 'Node.js', pct: 93, icon: ICONS.node },
-    { name: 'Express', pct: 90, icon: ICONS.server },
-    { name: 'REST API Design', pct: 91, icon: ICONS.api },
-    { name: 'Socket.io / WebRTC', pct: 85, icon: ICONS.socket },
+    { name: 'Node.js', icon: ICONS.node },
+    { name: 'Express', icon: ICONS.server },
+    { name: 'REST API Design', icon: ICONS.api },
+    { name: 'Next.js API Routes', icon: ICONS.socket },
   ],
   database: [
-    { name: 'MongoDB', pct: 90, icon: ICONS.db },
-    { name: 'PostgreSQL', pct: 84, icon: ICONS.table },
-    { name: 'Firebase', pct: 82, icon: ICONS.fire },
+    { name: 'MongoDB', icon: ICONS.db },
+    { name: 'PostgreSQL', icon: ICONS.table },
+    { name: 'Supabase', icon: ICONS.fire },
   ],
-  devops: [
-    { name: 'Git & GitHub', pct: 92, icon: ICONS.git },
-    { name: 'Docker', pct: 74, icon: ICONS.docker },
-    { name: 'Render / Vercel / Railway', pct: 88, icon: ICONS.cloud },
+  platform: [
+    { name: 'Git & GitHub', icon: ICONS.git },
+    { name: 'Vercel', icon: ICONS.cloud },
+    { name: 'Docker', icon: ICONS.docker },
   ],
-  ai: [
-    { name: 'LLM API Integration', pct: 86, icon: ICONS.brain },
-    { name: 'Prompt Engineering', pct: 89, icon: ICONS.wand },
-    { name: 'AI Image / Generative Tools', pct: 80, icon: ICONS.bolt },
+  integrations: [
+    { name: 'Paystack / Stripe', icon: ICONS.wand },
+    { name: 'Supabase Auth', icon: ICONS.brain },
+    { name: 'LLM API Integration', icon: ICONS.bolt },
   ],
 };
 
+/* ---------- SERVICES ---------- */
+const SERVICES = [
+  {
+    icon: ICONS.globe,
+    title: 'Business & Marketing Websites',
+    desc: 'Fast, professional websites for companies and services — built to load quickly, rank well, and represent the business properly online.',
+  },
+  {
+    icon: ICONS.stack,
+    title: 'Full-Stack Web Applications',
+    desc: 'End-to-end applications — a working interface backed by real APIs, databases, and authentication, not just a front-end mockup.',
+  },
+  {
+    icon: ICONS.layers,
+    title: 'SaaS Platforms & Dashboards',
+    desc: 'Multi-user platforms with accounts, roles, and data views — the kind of product a team logs into every day.',
+  },
+  {
+    icon: ICONS.cart,
+    title: 'E-Commerce & Marketplaces',
+    desc: 'Storefronts and marketplace flows — product catalogs, checkout, payments, and seller or vendor onboarding.',
+  },
+  {
+    icon: ICONS.server,
+    title: 'Backend & API Systems',
+    desc: 'The infrastructure behind a product — databases, authentication, payment integration, and APIs designed to hold up under real use.',
+  },
+  {
+    icon: ICONS.brain,
+    title: 'AI-Integrated Applications',
+    desc: 'Products that use LLM APIs for real functionality — not a chatbot bolted on, but AI used where it genuinely improves the experience.',
+  },
+];
+
+/* ---------- DEVELOPMENT PROCESS ---------- */
+const PROCESS = [
+  { num: '01', title: 'Discovery', desc: 'Understand the idea, the requirements, who it\'s for, and what it actually needs to do.' },
+  { num: '02', title: 'Planning', desc: 'Define the architecture, feature set, technology choices, and overall direction before writing code.' },
+  { num: '03', title: 'Design & Development', desc: 'Build the interface and the functionality together, so the two never drift apart.' },
+  { num: '04', title: 'Testing', desc: 'Check usability, responsiveness, and functionality across real devices and screen sizes.' },
+  { num: '05', title: 'Deployment', desc: 'Ship the product to production, configured properly rather than just "working on my machine."' },
+  { num: '06', title: 'Support & Iteration', desc: 'Stay involved after launch — fixing issues and improving the product as real usage reveals what matters.' },
+];
+
+/* ---------- WHY WORK WITH ME ---------- */
+const WHY_POINTS = [
+  { icon: ICONS.stack, title: 'Full-Stack Capability', desc: 'One developer who can own the interface, the backend, and the database — instead of coordinating three.' },
+  { icon: ICONS.check, title: 'End-to-End Delivery', desc: 'From first discovery call to a deployed, production URL — not a handoff halfway through.' },
+  { icon: ICONS.compass, title: 'Real Problem-Solving', desc: 'I care about whether the thing actually works for the people using it, not just whether it compiles.' },
+  { icon: ICONS.bolt, title: 'Clean, Maintainable Architecture', desc: 'Code that someone else — or future me — can actually read, extend, and debug.' },
+  { icon: ICONS.rocket, title: 'Deployment You Can Rely On', desc: 'Comfortable taking a project from local development to a live, properly configured production environment.' },
+  { icon: ICONS.wand, title: 'Straightforward Communication', desc: 'Clear updates on progress and honest answers about scope, timeline, and tradeoffs.' },
+];
+
+/* ---------- PROJECTS ----------
+   Real projects only — exactly three, no filler slots.
+   status: 'client' | 'development'
+   badgeText controls what's shown on the card + modal.
+   builtFor / role / capability power the case-study-style card. */
 const PROJECTS = [
   {
     id: 'imperial-shelter-tech',
     title: 'Imperial Shelter-Tech Konsult',
+    status: 'client',
+    badgeText: 'Client Project',
     year: '2026',
-    cats: ['fullstack', 'frontend'],
-    live: true,
-    short: 'A full-service marketing site for a Nigerian perimeter security & architectural consultancy — built to turn visitors into WhatsApp leads.',
-    desc: 'Imperial Shelter-Tech Konsult is an Ibadan-based perimeter security and architectural consultancy — rigid panel mesh fencing, solar-powered electric fences, CCTV, and full architectural design and construction, serving clients across Oyo State and beyond. I built their public-facing website: a fast, multi-page site with dedicated service pages, a filterable project portfolio, a blog, and a WhatsApp-first contact flow that turns visitors straight into pre-filled chat leads — the channel their sales process actually runs on.',
+    cats: ['client', 'fullstack'],
+    builtFor: 'Perimeter security & architectural consultancy',
+    role: 'Full-Stack Developer',
+    capability: 'Business website with lead-gen & WhatsApp integration',
+    short: 'Website for a perimeter security & architectural consultancy in Ibadan, Nigeria.',
+    desc: 'A full business website built for Imperial Shelter-Tech Konsult — a perimeter security and architectural consultancy based in Ibadan, Nigeria. The site presents their services (rigid panel mesh fencing, solar-powered electric fencing, perimeter security systems, architectural design & construction, land surveying, and CCTV installation), a project portfolio, and a lead-generation contact flow with WhatsApp integration.',
     features: [
-      'Six dedicated service pages (fencing, solar electric fence, CCTV, architecture, land surveying) each with its own free-quote CTA',
-      'One-tap WhatsApp lead capture with a pre-filled message, plus a scannable QR code for in-person and print use',
-      'Dynamic project portfolio with individual case-study pages for completed builds',
-      'Company blog and client-testimonials section for SEO and trust-building',
-      'Cloudinary-powered image and video pipeline for fast-loading, high-resolution site photography and footage',
-      'Full on-page SEO: structured metadata, Open Graph tags, and per-page titles and descriptions'
+      'Service pages covering all six of the client\'s core offerings',
+      'Project portfolio showcasing completed installations and builds',
+      'Direct WhatsApp quote-request integration with a scannable QR code',
+      'Client testimonials and a founder / company story section',
+      'Fully responsive across desktop, tablet, and mobile',
+      'Built and deployed on Vercel with Cloudinary-hosted media'
     ],
-    tags: ['Next.js', 'Vercel', 'Cloudinary', 'SEO', 'WhatsApp Integration', 'Responsive Design'],
-    img: 'assets/img/projects/imperial-shelter-tech.jpg',
+    tags: ['Next.js', 'Vercel', 'Cloudinary'],
+    img: 'https://res.cloudinary.com/dfrqlahmr/image/upload/q_auto/f_auto/v1782048209/IMG-20260621-WA0036_dbbgpi.jpg',
+    logo: 'assets/img/projects/imperial-shelter-tech-logo.png',
     demo: 'https://imperial-shelter-tech.vercel.app/',
     repo: '#'
   },
   {
     id: 'veyra',
     title: 'Veyra',
-    year: '2025',
-    cats: ['fullstack', 'ai', 'ecommerce'],
-    live: true,
-    short: 'Nigeria\'s AI-powered fashion discovery & marketplace app.',
-    desc: 'A social-meets-marketplace fashion app for Nigeria — a TikTok-style discovery feed for fashion, shoes, bags, streetwear, luxury, and native wear, combined with in-app chat, profiles, and a content creation flow for sellers.',
+    status: 'development',
+    badgeText: 'Under Development',
+    year: '2026',
+    cats: ['development', 'fullstack', 'ecommerce'],
+    builtFor: 'Own product — relationship, lifestyle & marketplace platform',
+    role: 'Product Design & Full-Stack Development',
+    capability: 'Marketplace, seller onboarding & subscription payments',
+    short: 'A relationship, lifestyle, and marketplace platform — buyer/seller accounts, storefronts, and subscriptions.',
+    desc: 'Veyra is a full-stack platform that brings relationship-focused experiences, marketplace discovery, and commerce into one product. It combines buyer and seller accounts, a "Become a Seller" onboarding flow, seller dashboards and storefronts, and tiered membership plans, built around the idea of making a complex ecosystem feel simple to navigate.',
     features: [
-      'Algorithmic "For You" / "Following" discovery feed across fashion categories',
-      'Category browsing — Fashion, Shoes, Bags, Streetwear, Luxury, Native Wear, Accessories',
-      'In-app messaging between buyers and sellers',
-      'Creator-style upload flow for listing new items',
-      'Notifications and personal profile system',
-      'Mobile-first PWA experience tuned for the Nigerian market'
+      'Marketplace with Buy Now purchasing',
+      'Buyer and Seller account types with dedicated onboarding',
+      'Seller Dashboard for managing storefronts and products',
+      'Free, Gold, and Elite seller membership tiers',
+      'Paystack payment integration with bank & payout verification',
+      'Supabase authentication and account security',
+      'Responsive design across mobile and desktop'
     ],
-    tags: ['React', 'Node.js', 'MongoDB', 'AI', 'PWA'],
-    img: 'assets/img/projects/veyra.jpg',
-    demo: 'https://veyra-umber-sigma.vercel.app',
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Paystack'],
+    img: null,
+    logo: 'assets/img/projects/veyra-logo.jpeg',
+    demo: 'https://veyra-umber-sigma.vercel.app/',
     repo: '#'
   },
   {
-    id: 'neuroforge-os',
-    title: 'Neuroforge OS',
-    year: '2024',
-    cats: ['frontend'],
-    live: false,
-    short: 'An experimental WebGL-driven personal operating-system concept.',
-    desc: 'An experimental concept site exploring how far a browser-based "desktop" interface can go — draggable windows, a WebGL particle background, and a custom window manager built in vanilla JS.',
+    id: 'amoura',
+    title: 'Amoura',
+    status: 'development',
+    badgeText: 'Under Development',
+    year: '2026',
+    cats: ['development', 'frontend'],
+    builtFor: 'Own product — private relationship-memory app',
+    role: 'Full-Stack Development',
+    capability: 'Private, polished consumer app experience',
+    short: 'A private, premium love-story app — letters, memories, and music made to be relived.',
+    desc: 'Amoura is a private, premium experience for preserving a relationship\'s letters, memories, and music in one place, designed to be revisited over time. It\'s currently in active development.',
     features: [
-      'Custom window manager with drag, resize, and z-index stacking',
-      'WebGL particle field reacting to cursor movement',
-      'Keyboard shortcuts for power-user navigation'
+      'Private, personal space for letters and memories',
+      'Music integration as part of the experience',
+      'Premium, polished visual design'
     ],
-    tags: ['React', 'Node.js', 'WebGL'],
-    img: 'assets/img/projects/neuroforge-os.jpg',
-    demo: '#',
-    repo: '#'
-  },
-  {
-    id: 'quantix',
-    title: 'Quantix Dashboard',
-    year: '2024',
-    cats: ['fullstack'],
-    live: false,
-    short: 'A metrics dashboard SaaS with animated data storytelling.',
-    desc: 'A B2B analytics dashboard that turns raw event data into an animated, scroll-driven story — built for a startup that needed their metrics to look as sharp as their product.',
-    features: [
-      'GSAP-driven animated chart reveals',
-      'Real-time data refresh via polling and websockets',
-      'Role-based access control for team accounts'
-    ],
-    tags: ['Next.js', 'MongoDB', 'GSAP'],
-    img: 'assets/img/projects/quantix.jpg',
-    demo: '#',
-    repo: '#'
-  },
-  {
-    id: 'void-commerce',
-    title: 'Void Commerce',
-    year: '2023',
-    cats: ['ecommerce'],
-    live: false,
-    short: 'A dark-themed streetwear storefront with Stripe checkout.',
-    desc: 'A full e-commerce storefront for a streetwear brand — product catalog, cart, Stripe checkout, and an admin panel for managing inventory and orders.',
-    features: [
-      'Stripe-powered checkout with webhook order confirmation',
-      'Admin panel for inventory and order management',
-      'Animated product gallery with size and color variants'
-    ],
-    tags: ['React', 'Stripe', 'Node.js'],
-    img: 'assets/img/projects/void-commerce.jpg',
-    demo: '#',
-    repo: '#'
-  },
-  {
-    id: 'pulse-analytics',
-    title: 'Pulse Analytics',
-    year: '2023',
-    cats: ['ai', 'frontend'],
-    live: false,
-    short: 'D3.js data-visualization tool for marketing teams.',
-    desc: 'A self-serve data visualization tool letting marketing teams build custom charts from CSV uploads without needing a data analyst on every request.',
-    features: [
-      'Drag-and-drop CSV-to-chart pipeline',
-      'D3.js custom chart rendering with export to PNG/SVG',
-      'Shareable read-only dashboard links'
-    ],
-    tags: ['D3.js', 'Express', 'PostgreSQL'],
-    img: 'assets/img/projects/pulse-analytics.jpg',
-    demo: '#',
-    repo: '#'
-  },
-  {
-    id: 'ether-landing',
-    title: 'Ether Landing',
-    year: '2023',
-    cats: ['frontend'],
-    live: false,
-    short: 'A cinematic Three.js marketing site for a Web3 product.',
-    desc: 'A single-page marketing site for a Web3 startup, built around a Three.js hero scene and scroll-triggered GSAP sequences designed to feel cinematic without sacrificing load time.',
-    features: [
-      'Custom Three.js 3D hero scene, optimized to under 2MB',
-      'GSAP ScrollTrigger-based scene transitions',
-      'Lighthouse performance score of 96+'
-    ],
-    tags: ['Three.js', 'GSAP', 'HTML/CSS'],
-    img: 'assets/img/projects/ether-landing.jpg',
-    demo: '#',
+    tags: ['Next.js', 'Vercel'],
+    img: null,
+    logo: 'assets/img/projects/amoura-logo.png',
+    demo: 'https://amoura-w3vb.vercel.app/',
     repo: '#'
   },
 ];
 
+/* ---------- FIRST-VISIT "CURRENTLY BUILDING" NOTIFICATION ----------
+   Data-driven so a finished product can be removed from the notice
+   with a one-line edit — no need to touch the notification logic
+   in main.js. Set `active: false` (or delete the entry) once a
+   product ships. */
+const BUILDING_NOW = [
+  { name: 'Amoura', active: true },
+  { name: 'Veyra', active: true },
+];
+
 const ROLES = [
   'Full-Stack Developer',
-  'UI / Motion Engineer',
+  'Digital Product Builder',
   'Backend Architect',
-  'AI Integration Specialist',
-  'Digital Craftsman'
+  'AI Integration Specialist'
 ];

@@ -76,6 +76,19 @@
     if(yearEl) yearEl.textContent = new Date().getFullYear();
   })();
 
+  /* ---------- GENUINE, COMPUTED "YEARS BUILDING" FIGURE ----------
+     Derived from FOUNDING_YEAR in data.js rather than hardcoded, so
+     it's always accurate and never needs manual updating. */
+  (function yearsSince(){
+    if(typeof FOUNDING_YEAR === 'undefined') return;
+    const years = Math.max(1, new Date().getFullYear() - FOUNDING_YEAR);
+    const label = years + '+ Years';
+    const a = document.getElementById('factSince');
+    const b = document.getElementById('factBandSince');
+    if(a) a.textContent = label;
+    if(b) b.textContent = label;
+  })();
+
   /* ---------- STAGGERED HERO TITLE REVEAL ---------- */
   (function heroTitleReveal(){
     const words = document.querySelectorAll('#heroTitle .title-word');
@@ -135,6 +148,30 @@
     });
   });
 
+  /* ---------- NAV: highlight the current section while scrolling ---------- */
+  (function navActiveSection(){
+    const sectionIds = ['about','services','stack','work','experience','contact'];
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const navAnchors = Array.from(navLinks.querySelectorAll('a[href^="#"]'))
+      .filter(a => !a.classList.contains('nav-cta-mobile'));
+    if(!sections.length || !('IntersectionObserver' in window)) return;
+
+    function setCurrent(id){
+      navAnchors.forEach(a => {
+        const isMatch = a.getAttribute('href') === '#' + id;
+        a.classList.toggle('is-current', isMatch);
+        if(isMatch) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+      });
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio);
+      if(visible.length) setCurrent(visible[0].target.id);
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+
+    sections.forEach(s => io.observe(s));
+  })();
+
   /* ---------- TYPING ANIMATION FOR ROLES ---------- */
   (function typeRoles(){
     const el = document.getElementById('typedRole');
@@ -170,84 +207,9 @@
     setTimeout(tick, 900);
   })();
 
-  /* ---------- HERO CANVAS: forge particle field ---------- */
-  (function heroCanvas(){
-    const canvas = document.getElementById('heroCanvas');
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let w, h, dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let particles = [];
-    let mouseX = 0.5, mouseY = 0.5;
-
-    function resize(){
-      w = canvas.clientWidth;
-      h = canvas.clientHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
-
-    function initParticles(){
-      particles = [];
-      const isNarrow = w < 640;
-      const count = reduceMotion ? 0 : (isNarrow ? 45 : 90);
-      const sizeScale = isNarrow ? 0.55 : 1;
-      for(let i=0;i<count;i++){
-        particles.push({
-          x: Math.random()*w,
-          y: Math.random()*h,
-          r: (Math.random()*1.6 + 0.4) * sizeScale,
-          vx: (Math.random()-0.5)*0.15,
-          vy: (Math.random()-0.5)*0.15,
-          hue: Math.random() < 0.55 ? 'amber' : 'cyan',
-          o: Math.random()*0.5 + 0.2
-        });
-      }
-    }
-
-    function getColor(name, alpha){
-      return name === 'amber'
-        ? `rgba(255,107,53,${alpha})`
-        : `rgba(94,234,212,${alpha})`;
-    }
-
-    function draw(){
-      ctx.clearRect(0,0,w,h);
-      const dx = (mouseX - 0.5) * 18;
-      const dy = (mouseY - 0.5) * 18;
-
-      for(const p of particles){
-        p.x += p.vx;
-        p.y += p.vy;
-        if(p.x < -10) p.x = w+10;
-        if(p.x > w+10) p.x = -10;
-        if(p.y < -10) p.y = h+10;
-        if(p.y > h+10) p.y = -10;
-
-        const px = p.x + dx * (p.r);
-        const py = p.y + dy * (p.r);
-
-        ctx.beginPath();
-        ctx.arc(px, py, p.r * 1.8, 0, Math.PI*2);
-        ctx.fillStyle = getColor(p.hue, p.o);
-        ctx.fill();
-      }
-      if(!reduceMotion) requestAnimationFrame(draw);
-    }
-
-    window.addEventListener('resize', () => { resize(); initParticles(); }, { passive: true });
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX / window.innerWidth;
-      mouseY = e.clientY / window.innerHeight;
-    }, { passive: true });
-
-    resize();
-    initParticles();
-    if(!reduceMotion) draw();
-    else draw();
-  })();
-
-  /* ---------- HERO MOUSE-FOLLOW GLOW ---------- */
+  /* ---------- HERO MOUSE-FOLLOW GLOW ----------
+     The only motion in the hero background — a soft, subtle blue
+     glow that tracks the cursor. No particle canvas. */
   (function heroGlow(){
     const hero = document.querySelector('.hero');
     const glow = document.getElementById('heroGlow');
@@ -293,8 +255,9 @@
 
 })();
 /* ============================================
-   NEUROFORGE — PART 2: counters, skills, projects,
-   testimonials, contact form, scroll reveal
+   NEUROFORGE — PART 2: content rendering
+   (services, stack, projects, process, why),
+   build notice, contact form, scroll reveal
    ============================================ */
 (function(){
   'use strict';
@@ -318,42 +281,47 @@
     targets.forEach(t => io.observe(t));
   })();
 
-  /* ---------- ANIMATED COUNTERS ---------- */
-  (function counters(){
-    const counters = document.querySelectorAll('.js-counter');
-    if(!counters.length) return;
-
-    function animateCount(el){
-      const target = parseInt(el.getAttribute('data-target'), 10) || 0;
-      if(reduceMotion){ el.textContent = target; return; }
-      const duration = 1400;
-      const start = performance.now();
-      function step(now){
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.round(eased * target);
-        if(progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
-
-    if('IntersectionObserver' in window){
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if(entry.isIntersecting){
-            animateCount(entry.target);
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.4 });
-      counters.forEach(c => io.observe(c));
-    } else {
-      counters.forEach(animateCount);
-    }
+  /* ---------- SERVICES: render from data ---------- */
+  (function services(){
+    const grid = document.getElementById('servicesGrid');
+    if(!grid || typeof SERVICES === 'undefined') return;
+    grid.innerHTML = SERVICES.map(s => `
+      <div class="service-card">
+        <div class="service-icon">${s.icon}</div>
+        <h3>${s.title}</h3>
+        <p>${s.desc}</p>
+      </div>
+    `).join('');
   })();
 
-  /* ---------- SKILLS: build panels from data, tab switching, animate bars ---------- */
-  (function skills(){
+  /* ---------- PROCESS: render from data (a real ordered sequence) ---------- */
+  (function process(){
+    const list = document.getElementById('processList');
+    if(!list || typeof PROCESS === 'undefined') return;
+    list.innerHTML = PROCESS.map(step => `
+      <div class="process-step">
+        <span class="process-num">${step.num}</span>
+        <h3>${step.title}</h3>
+        <p>${step.desc}</p>
+      </div>
+    `).join('');
+  })();
+
+  /* ---------- WHY WORK WITH ME: render from data ---------- */
+  (function why(){
+    const grid = document.getElementById('whyGrid');
+    if(!grid || typeof WHY_POINTS === 'undefined') return;
+    grid.innerHTML = WHY_POINTS.map(w => `
+      <div class="why-card">
+        <div class="why-icon">${w.icon}</div>
+        <h3>${w.title}</h3>
+        <p>${w.desc}</p>
+      </div>
+    `).join('');
+  })();
+
+  /* ---------- TECH STACK: build chip panels from data, tab switching ---------- */
+  (function stack(){
     const panelsWrap = document.getElementById('skillPanels');
     const tabs = document.querySelectorAll('.skill-tab');
     if(!panelsWrap || typeof SKILLS === 'undefined') return;
@@ -361,37 +329,10 @@
     Object.keys(SKILLS).forEach(cat => {
       const panel = panelsWrap.querySelector(`.skill-panel[data-cat="${cat}"]`);
       if(!panel) return;
-      panel.innerHTML = SKILLS[cat].map(skill => `
-        <div class="skill-bar-row">
-          <div class="skill-bar-name">${skill.icon}<span>${skill.name}</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" data-pct="${skill.pct}"></div></div>
-          <div class="skill-bar-pct">${skill.pct}%</div>
-        </div>
-      `).join('');
+      panel.innerHTML = `<div class="skill-chip-grid">${SKILLS[cat].map(skill => `
+        <div class="skill-chip">${skill.icon}<span>${skill.name}</span></div>
+      `).join('')}</div>`;
     });
-
-    function animateBars(panel){
-      panel.querySelectorAll('.skill-bar-fill').forEach(fill => {
-        const pct = fill.getAttribute('data-pct');
-        requestAnimationFrame(() => { fill.style.width = pct + '%'; });
-      });
-    }
-
-    // animate the initially-active panel when it scrolls into view
-    const activePanel = panelsWrap.querySelector('.skill-panel.is-active');
-    if(activePanel && 'IntersectionObserver' in window){
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if(entry.isIntersecting){
-            animateBars(entry.target);
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      io.observe(activePanel);
-    } else if(activePanel){
-      animateBars(activePanel);
-    }
 
     function activateTab(tab, opts){
       opts = opts || {};
@@ -404,10 +345,7 @@
       });
       panelsWrap.querySelectorAll('.skill-panel').forEach(p => p.classList.remove('is-active'));
       const target = panelsWrap.querySelector(`.skill-panel[data-cat="${cat}"]`);
-      if(target){
-        target.classList.add('is-active');
-        animateBars(target);
-      }
+      if(target) target.classList.add('is-active');
       if(opts.focus) tab.focus();
     }
 
@@ -434,32 +372,39 @@
     const grid = document.getElementById('projectGrid');
     if(!grid || typeof PROJECTS === 'undefined') return;
 
-    function webpSrc(imgPath){
-      return imgPath.replace(/\.(jpe?g|png)$/i, '.webp');
-    }
-
     function statusBadgeHTML(p){
-      if(p.placeholder) return `<span class="project-card-placeholder-badge">Placeholder</span>`;
-      if(p.live) return `<span class="project-card-live"><span class="dot"></span>Live</span>`;
-      return `<span class="project-card-soon"><span class="dot"></span>Coming Soon</span>`;
+      if(p.status === 'client'){
+        return `<span class="status-badge is-client"><span class="dot"></span>Client Project</span>`;
+      }
+      return `<span class="status-badge is-dev"><span class="dot"></span>Under Development</span>`;
     }
 
-    function cardHTML(p, i){
+    function thumbHTML(p, idx){
+      const img = p.logo
+        ? `<img src="${p.logo}" alt="${p.title} logo" loading="lazy">`
+        : `<img src="${p.img}" alt="${p.title} project screenshot" loading="lazy">`;
+      return `<div class="project-thumb"><span class="project-index">${String(idx + 1).padStart(2,'0')}</span>${img}</div>`;
+    }
+
+    function cardHTML(p, idx){
       return `
-        <article class="project-card${p.placeholder ? ' is-placeholder' : ''}" data-cats="${p.cats.join(' ')}" data-id="${p.id}" tabindex="0" role="button" aria-label="View details for ${p.title}">
-          <div class="project-card-top">
-            ${statusBadgeHTML(p)}
-          </div>
-          <div class="project-thumb">
-            <picture>
-              <source srcset="${webpSrc(p.img)}" type="image/webp">
-              <img src="${p.img}" alt="${p.title} project screenshot" loading="lazy" width="640" height="400">
-            </picture>
-          </div>
-          <h3 class="project-card-title">${p.title}</h3>
-          <p class="project-card-desc">${p.short}</p>
-          <div class="project-card-foot">
-            <div class="tag-row">${p.tags.slice(0,3).map(t => `<span class="pill">${t}</span>`).join('')}</div>
+        <article class="project-card" data-cats="${p.cats.join(' ')}" data-id="${p.id}" tabindex="0" role="button" aria-label="View case study: ${p.title}">
+          ${thumbHTML(p, idx)}
+          <div class="project-body">
+            <div class="project-card-top">
+              <h3 class="project-card-title">${p.title}</h3>
+              ${statusBadgeHTML(p)}
+            </div>
+            <div class="project-meta-row">
+              <div class="project-meta-item"><span class="lbl">Built For</span><span class="val">${p.builtFor}</span></div>
+              <div class="project-meta-item"><span class="lbl">My Role</span><span class="val">${p.role}</span></div>
+              <div class="project-meta-item"><span class="lbl">Capability</span><span class="val">${p.capability}</span></div>
+            </div>
+            <p class="project-card-desc">${p.short}</p>
+            <div class="project-card-foot">
+              <div class="tag-row">${p.tags.slice(0,4).map(t => `<span class="pill">${t}</span>`).join('')}</div>
+              <span class="project-view-link">View Case Study <span class="arrow">↗</span></span>
+            </div>
           </div>
         </article>
       `;
@@ -527,9 +472,11 @@
     let lastFocused = null;
 
     function openModal(project){
-      modalImg.src = project.img;
-      modalImg.alt = project.title + ' project screenshot';
-      modalYear.textContent = project.placeholder ? 'Placeholder — Slot Open' : (project.live ? 'Live' : 'Coming Soon');
+      const src = project.logo || project.img;
+      modalImg.src = src;
+      modalImg.alt = project.title + (project.logo ? ' logo' : ' project screenshot');
+      modalImg.classList.toggle('is-logo-panel', !!project.logo);
+      modalYear.textContent = project.badgeText + ' · ' + project.year;
       modalTitle.textContent = project.title;
       modalDesc.textContent = project.desc;
       modalFeatures.innerHTML = project.features.map(f => `<li>${f}</li>`).join('');
@@ -592,64 +539,38 @@
     });
   })();
 
-  /* ---------- TESTIMONIAL CAROUSEL ---------- */
-  (function testimonials(){
-    const track = document.getElementById('testiTrack');
-    if(!track) return;
-    const carousel = document.querySelector('.testi-carousel') || track.parentElement;
-    const slides = track.querySelectorAll('.testi-slide');
-    const dotsWrap = document.getElementById('testiDots');
-    const prevBtn = document.getElementById('testiPrev');
-    const nextBtn = document.getElementById('testiNext');
-    let current = 0;
-    let autoTimer;
-    let isPaused = false;
+  /* ---------- FIRST-VISIT "CURRENTLY BUILDING" NOTIFICATION ----------
+     Data-driven from BUILDING_NOW in data.js. Shows once per browser
+     (localStorage-gated), dismissible, never blocks the page. To
+     remove a shipped product from the notice, just set its `active`
+     flag to false in data.js — no changes needed here. */
+  (function buildNotice(){
+    const notice = document.getElementById('buildNotice');
+    const textEl = document.getElementById('buildNoticeText');
+    const closeBtn = document.getElementById('buildNoticeClose');
+    if(!notice || typeof BUILDING_NOW === 'undefined') return;
 
-    const liveStatus = document.createElement('div');
-    liveStatus.className = 'visually-hidden';
-    liveStatus.setAttribute('aria-live', 'polite');
-    carousel.appendChild(liveStatus);
+    const active = BUILDING_NOW.filter(p => p.active);
+    if(!active.length) return; // nothing in development right now — stay silent
 
-    slides.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'testi-dot' + (i === 0 ? ' is-active' : '');
-      dot.setAttribute('aria-label', 'Go to testimonial ' + (i+1));
-      dot.addEventListener('click', () => { goTo(i); restart(); });
-      dotsWrap.appendChild(dot);
-    });
+    const STORAGE_KEY = 'neuroforge-build-notice-dismissed-v1';
+    let dismissed = false;
+    try{ dismissed = localStorage.getItem(STORAGE_KEY) === '1'; }catch(e){}
+    if(dismissed) return;
 
-    function goTo(i, announce){
-      current = (i + slides.length) % slides.length;
-      track.style.transform = `translateX(-${current * 100}%)`;
-      dotsWrap.querySelectorAll('.testi-dot').forEach((d, idx) => d.classList.toggle('is-active', idx === current));
-      if(announce) liveStatus.textContent = `Testimonial ${current + 1} of ${slides.length}`;
+    const names = active.map(p => p.name);
+    const joined = names.length > 1
+      ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1]
+      : names[0];
+    textEl.innerHTML = `<strong>${joined}</strong> ${names.length > 1 ? 'are' : 'is'} currently under active development. Live previews are up, but neither is a finished product yet.`;
+
+    function dismiss(){
+      notice.classList.remove('is-visible');
+      try{ localStorage.setItem(STORAGE_KEY, '1'); }catch(e){}
     }
-    function next(){ goTo(current + 1, true); }
-    function prev(){ goTo(current - 1, true); }
-    function restart(){
-      clearInterval(autoTimer);
-      if(!reduceMotion && !isPaused) autoTimer = setInterval(next, 6000);
-    }
+    closeBtn.addEventListener('click', dismiss);
 
-    prevBtn.addEventListener('click', () => { prev(); restart(); });
-    nextBtn.addEventListener('click', () => { next(); restart(); });
-
-    /* Pause auto-advance on hover or keyboard focus so it never fights the reader (WCAG 2.2.2) */
-    carousel.addEventListener('mouseenter', () => { isPaused = true; clearInterval(autoTimer); });
-    carousel.addEventListener('mouseleave', () => { isPaused = false; restart(); });
-    carousel.addEventListener('focusin', () => { isPaused = true; clearInterval(autoTimer); });
-    carousel.addEventListener('focusout', (e) => {
-      if(!carousel.contains(e.relatedTarget)){ isPaused = false; restart(); }
-    });
-
-    let touchStartX = 0;
-    track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend', e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if(Math.abs(diff) > 40){ diff > 0 ? next() : prev(); restart(); }
-    }, { passive: true });
-
-    restart();
+    setTimeout(() => { notice.classList.add('is-visible'); }, 1400);
   })();
 
   /* ---------- CONTACT FORM ---------- */

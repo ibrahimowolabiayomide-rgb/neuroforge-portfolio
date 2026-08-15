@@ -1,0 +1,37 @@
+/* ============================================
+   PROCESS — how I build
+   A numbered sequence is appropriate here: it is
+   an actual ordered process, not decoration.
+   ============================================ */
+
+.process-list{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--space-4);
+}
+@media (max-width:900px){ .process-list{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:600px){ .process-list{ grid-template-columns:1fr; } }
+
+.process-step{
+  position:relative;
+  padding:var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  transition:transform .3s var(--ease-out), border-color .3s var(--ease-out), box-shadow .3s var(--ease-out);
+}
+.process-step:hover{
+  transform:translateY(-3px);
+  border-color:color-mix(in srgb, var(--accent) 35%, var(--border));
+  box-shadow:var(--shadow-sm);
+}
+@media (prefers-reduced-motion: reduce){ .process-step:hover{ transform:none; } }
+.process-num{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:.06em;
+  color:var(--accent-text);
+  display:block;
+  margin-bottom:10px;
+}
+.process-step h3{ font-size:16px; font-weight:700; margin:0 0 6px; }
+.process-step p{ font-size:13.5px; line-height:1.6; color:var(--text-dim); margin:0; }
