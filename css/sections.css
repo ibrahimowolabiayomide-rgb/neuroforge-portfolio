@@ -63,106 +63,66 @@
 .timeline-tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
 
 /* ============================================
-   CERTIFICATIONS
+   CERTIFICATIONS — minimal row, no icon boxes
    ============================================ */
 .cert-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:var(--border);
-  border:1px solid var(--border);
+  border-top:1px solid var(--border);
 }
 @media (max-width:780px){ .cert-grid{ grid-template-columns:1fr; } }
 .cert-card{
-  background:var(--bg);
-  padding:var(--space-4);
+  padding:var(--space-4) var(--space-4) var(--space-4) 0;
+  border-bottom:1px solid var(--border);
+  border-right:1px solid var(--border);
   display:flex;
   flex-direction:column;
-  gap:10px;
-  position:relative;
-  z-index:1;
-  transition:background .3s var(--ease-out), transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+  gap:8px;
 }
-.cert-card:hover{
-  background:var(--bg-raised);
-  transform:translateY(-3px);
-  box-shadow:var(--shadow-md);
-  z-index:2;
-}
-.cert-icon{ width:30px; height:30px; color:var(--accent); transition:transform .35s var(--ease-spring); }
-.cert-card:hover .cert-icon{ transform:scale(1.12) rotate(-6deg); }
-@media (prefers-reduced-motion: reduce){
-  .cert-card:hover{ transform:none; }
-  .cert-card:hover .cert-icon{ transform:none; }
-}
-.cert-title{ font-weight:600; font-size:15px; }
+.cert-card:nth-child(3n){ border-right:none; }
+@media (max-width:780px){ .cert-card{ border-right:none; padding-left:0; } }
+.cert-icon{ width:22px; height:22px; color:var(--accent); }
+.cert-title{ font-weight:700; font-size:15.5px; }
 .cert-issuer{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); }
 
-.stack-marquee{
-  overflow:hidden;
-  border-top:1px solid var(--border);
-  border-bottom:1px solid var(--border);
+/* ============================================
+   WHY WORK WITH ME — editorial statements
+   Large-type list rather than icon cards — this
+   is the third "icon + title + paragraph" pattern
+   the site would otherwise repeat, so it gets its
+   own rhythm instead.
+   ============================================ */
+.why-list{ border-top:1px solid var(--border); }
+.why-row{
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:var(--space-4);
   padding:var(--space-4) 0;
-  margin:var(--space-6) 0 0;
-  white-space:nowrap;
+  border-bottom:1px solid var(--border);
 }
-.stack-track{
-  display:inline-flex;
-  gap:var(--space-6);
-  animation:stack-scroll 32s linear infinite;
+.why-row .why-num{
+  font-family:var(--font-mono);
+  font-size:12.5px;
+  color:var(--text-faint);
+  padding-top:8px;
 }
-.stack-track span{
+.why-row h3{
   font-family:var(--font-display);
   font-weight:800;
-  font-size:22px;
+  font-size:clamp(19px,2.4vw,24px);
   letter-spacing:-.005em;
-  color:var(--text-faint);
-  display:inline-flex;
-  align-items:center;
-  gap:var(--space-6);
+  margin:0 0 6px;
 }
-.stack-track span em{ color:var(--accent); font-style:normal; }
-@keyframes stack-scroll{
-  0%{ transform:translateX(0); }
-  100%{ transform:translateX(-50%); }
+.why-row p{
+  font-size:14px;
+  line-height:1.65;
+  color:var(--text-dim);
+  margin:0;
+  max-width:600px;
 }
-@media (prefers-reduced-motion: reduce){
-  .stack-track{ animation:none; }
+@media (max-width:560px){
+  .why-row{ grid-template-columns:34px 1fr; gap:var(--space-3); }
 }
-
-/* ============================================
-   WHY WORK WITH ME
-   ============================================ */
-.why-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:var(--space-4);
-}
-@media (max-width:900px){ .why-grid{ grid-template-columns:repeat(2,1fr); } }
-@media (max-width:600px){ .why-grid{ grid-template-columns:1fr; } }
-.why-card{
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  padding:var(--space-4);
-  transition:transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s var(--ease-out);
-}
-.why-card:hover{
-  transform:translateY(-4px);
-  box-shadow:var(--shadow-md);
-  border-color:color-mix(in srgb, var(--accent) 35%, var(--border));
-}
-@media (prefers-reduced-motion: reduce){ .why-card:hover{ transform:none; } }
-.why-icon{
-  width:38px; height:38px;
-  display:flex; align-items:center; justify-content:center;
-  color:var(--accent);
-  background:color-mix(in srgb, var(--accent) 12%, transparent);
-  border-radius:var(--radius-sm);
-  margin-bottom:var(--space-3);
-}
-.why-icon svg{ width:19px; height:19px; }
-.why-card h3{ font-size:15.5px; font-weight:600; margin:0 0 6px; }
-.why-card p{ font-size:13.5px; line-height:1.6; color:var(--text-dim); margin:0; }
 
 /* ============================================
    CONTACT

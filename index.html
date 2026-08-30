@@ -118,29 +118,43 @@
   <div class="hero-grid-overlay" aria-hidden="true"></div>
   <div class="hero-glow" id="heroGlow" aria-hidden="true"></div>
   <div class="hero-inner">
-    <div class="hero-kicker reveal"><span class="pulse"></span>IBADAN, NIGERIA — AVAILABLE FOR WORK</div>
-    <div class="hero-clock reveal" id="heroClock" aria-live="off">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
-      <span class="hero-clock-time" id="heroClockTime">--:--:--</span>
-      <span class="hero-clock-loc" id="heroClockLoc">Detecting your location…</span>
+    <div class="hero-copy">
+      <div class="hero-status reveal" id="heroStatus" aria-live="off">
+        <span class="pulse"></span>
+        <span>Available for work</span>
+        <span class="sep">·</span>
+        <span id="heroClockTime">--:--:--</span>
+        <span class="sep">·</span>
+        <span id="heroClockLoc">Ibadan, Nigeria</span>
+      </div>
+      <h1 class="hero-title" id="heroTitle">
+        <span class="title-word accent-grad" data-delay="0">Ibrahim Owolabi</span><br>
+        <span class="title-word o-line" data-delay="1">builds full-stack software.</span>
+      </h1>
+      <div class="hero-role-row reveal">
+        <span class="bracket">&lt;</span><span id="typedRole">Full-Stack Developer</span><span class="type-cursor" aria-hidden="true"></span><span class="bracket">/&gt;</span>
+      </div>
+      <p class="hero-desc reveal">I design and build modern websites, full-stack web applications, and digital products — under the name <strong>Neuroforge</strong>. Interfaces, APIs, databases, and deployment, handled by one developer who sees a project through end to end.</p>
+      <div class="hero-ctas reveal">
+        <a href="#work" class="btn btn-primary">View My Work <span class="arrow">↗</span></a>
+        <a href="#contact" class="btn btn-ghost">Work With Me <span class="arrow">↗</span></a>
+      </div>
+      <div class="hero-facts reveal" id="heroFacts">
+        <div class="hero-fact"><span class="lbl">Based In</span><span class="val">Ibadan, Nigeria</span></div>
+        <div class="hero-fact"><span class="lbl">Building Since</span><span class="val" id="factSince">2020</span></div>
+        <div class="hero-fact"><span class="lbl">Core Stack</span><span class="val">React · Next.js · Node.js</span></div>
+        <div class="hero-fact"><span class="lbl">Availability</span><span class="val">Freelance &amp; Full-Time Roles</span></div>
+      </div>
     </div>
-    <h1 class="hero-title" id="heroTitle">
-      <span class="title-word accent-grad" data-delay="0">Ibrahim Owolabi</span><br>
-      <span class="title-word o-line" data-delay="1">builds full-stack software.</span>
-    </h1>
-    <div class="hero-role-row reveal">
-      <span class="bracket">&lt;</span><span id="typedRole">Full-Stack Developer</span><span class="type-cursor" aria-hidden="true"></span><span class="bracket">/&gt;</span>
-    </div>
-    <p class="hero-desc reveal">I design and build modern websites, full-stack web applications, and digital products — under the name <strong>Neuroforge</strong>. Interfaces, APIs, databases, and deployment, handled by one developer who sees a project through end to end.</p>
-    <div class="hero-ctas reveal">
-      <a href="#work" class="btn btn-primary">View My Work <span class="arrow">↗</span></a>
-      <a href="#contact" class="btn btn-ghost">Work With Me <span class="arrow">↗</span></a>
-    </div>
-    <div class="hero-facts reveal" id="heroFacts">
-      <div class="hero-fact"><span class="lbl">Based In</span><span class="val">Ibadan, Nigeria</span></div>
-      <div class="hero-fact"><span class="lbl">Building Since</span><span class="val" id="factSince">2020</span></div>
-      <div class="hero-fact"><span class="lbl">Core Stack</span><span class="val">React · Next.js · Node.js</span></div>
-      <div class="hero-fact"><span class="lbl">Availability</span><span class="val">Freelance &amp; Full-Time Roles</span></div>
+
+    <div class="hero-visual reveal" aria-hidden="true">
+      <div class="orbit" id="heroOrbit">
+        <div class="orbit-halo"></div>
+        <div class="orbit-ring" id="orbitRing"></div>
+        <div class="orbit-core">
+          <span class="orbit-core-dot"></span>
+        </div>
+      </div>
     </div>
   </div>
   <div class="scroll-cue" aria-hidden="true"><span>Scroll</span><span class="line"></span></div>
@@ -211,7 +225,7 @@
       <div><div class="eyebrow">02 — What I Build</div><h2 class="h-display" style="font-size:clamp(32px,5vw,52px)">Services</h2></div>
       <p>What I actually build, matched to what I'm actually skilled in — not a generic services list.</p>
     </div>
-    <div class="services-grid reveal" id="servicesGrid"></div>
+    <div class="services-list reveal" id="servicesGrid"></div>
   </div>
 </section>
 
@@ -265,26 +279,33 @@
   </div>
 </section>
 
-<!-- Project detail modal -->
-<div class="modal-overlay" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal-box">
-    <button class="modal-close" id="modalClose" aria-label="Close project details">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+<!-- Full-screen project case-study overlay -->
+<div class="case-overlay" id="caseOverlay" role="dialog" aria-modal="true" aria-labelledby="caseTitle" aria-hidden="true">
+  <div class="case-topbar">
+    <button class="case-close" id="caseClose" aria-label="Close case study">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <span>Close</span>
     </button>
-    <img class="modal-img" id="modalImg" src="" alt="" loading="lazy">
-    <div class="modal-body">
-      <span class="modal-year" id="modalYear"></span>
-      <h3 class="modal-title" id="modalTitle"></h3>
-      <p class="modal-desc" id="modalDesc"></p>
-      <div class="modal-section-label">Key Features</div>
-      <ul class="modal-feature-list" id="modalFeatures"></ul>
-      <div class="modal-section-label">Stack</div>
-      <div class="tag-row" id="modalTags"></div>
-      <div class="modal-actions">
-        <a href="#" id="modalDemo" class="btn btn-primary" target="_blank" rel="noopener">Live Preview <span class="arrow">↗</span></a>
-        <a href="#" id="modalRepo" class="btn btn-ghost" target="_blank" rel="noopener">GitHub <span class="arrow">↗</span></a>
-      </div>
+    <span class="case-topbar-index" id="caseIndex"></span>
+  </div>
+  <div class="case-scroll" id="caseScroll" tabindex="-1">
+    <div class="case-media" id="caseMedia"><img id="caseMediaImg" src="" alt=""></div>
+    <div class="case-layout container">
+      <aside class="case-sidebar">
+        <span class="status-badge" id="caseBadge"></span>
+        <h2 class="case-title" id="caseTitle"></h2>
+        <p class="case-tagline" id="caseTagline"></p>
+        <dl class="case-meta" id="caseMetaRow"></dl>
+        <div class="tag-row" id="caseTags"></div>
+        <a href="#" id="caseLiveLink" class="btn btn-primary btn-block" target="_blank" rel="noopener">Visit Live Project <span class="arrow">↗</span></a>
+      </aside>
+      <article class="case-article" id="caseArticle"></article>
     </div>
+    <button class="case-next" id="caseNext">
+      <span class="lbl">Next Project</span>
+      <span class="name" id="caseNextName"></span>
+      <span class="arrow" aria-hidden="true">→</span>
+    </button>
   </div>
 </div>
 
@@ -297,7 +318,7 @@
       <div><div class="eyebrow">05 — Development Process</div><h2 class="h-display" style="font-size:clamp(32px,5vw,52px)">How I Build</h2></div>
       <p>The same six-stage sequence, every project — from first conversation to what happens after launch.</p>
     </div>
-    <div class="process-list reveal" id="processList"></div>
+    <div class="process-rail reveal" id="processList"></div>
   </div>
 </section>
 
@@ -310,7 +331,7 @@
       <div><div class="eyebrow">06 — Why Work With Me</div><h2 class="h-display" style="font-size:clamp(32px,5vw,52px)">What You Actually Get</h2></div>
       <p>No client testimonials here yet — just the genuine qualities I bring to a project.</p>
     </div>
-    <div class="why-grid reveal" id="whyGrid"></div>
+    <div class="why-list reveal" id="whyGrid"></div>
   </div>
 </section>
 
@@ -385,13 +406,6 @@
         <div class="cert-issuer">MongoDB University</div>
       </div>
     </div>
-
-    <div class="stack-marquee reveal" aria-hidden="true">
-      <div class="stack-track">
-        <span>React <em>★</em> Next.js <em>★</em> Node.js <em>★</em> Express <em>★</em> MongoDB <em>★</em> PostgreSQL <em>★</em> Supabase <em>★</em> TypeScript <em>★</em></span>
-        <span>React <em>★</em> Next.js <em>★</em> Node.js <em>★</em> Express <em>★</em> MongoDB <em>★</em> PostgreSQL <em>★</em> Supabase <em>★</em> TypeScript <em>★</em></span>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -441,7 +455,7 @@
       </div>
 
       <div class="reveal">
-        <div class="modal-section-label" style="margin-bottom:18px">Or Send A Message Directly</div>
+        <div class="field-label" style="margin-bottom:18px">Or Send A Message Directly</div>
         <div id="contactFormWrap">
           <form id="contactForm" action="https://formsubmit.co/ajax/ibrahimowolabiayomide@gmail.com" method="POST" novalidate>
             <input type="hidden" name="_subject" value="New message from Neuroforge portfolio">

@@ -169,6 +169,17 @@ button{ font-family:inherit; }
   background:var(--accent);
 }
 
+/* Shared small-caps field label — used wherever a block of content
+   needs a quiet mono heading (contact form, case-study article). */
+.field-label{
+  font-family:var(--font-mono);
+  font-size:10.5px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+  margin-bottom:10px;
+}
+
 .visually-hidden{
   position:absolute !important;
   width:1px;height:1px;

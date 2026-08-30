@@ -281,43 +281,86 @@
     targets.forEach(t => io.observe(t));
   })();
 
-  /* ---------- SERVICES: render from data ---------- */
+  /* ---------- SERVICES: render from data as a numbered list ---------- */
   (function services(){
-    const grid = document.getElementById('servicesGrid');
-    if(!grid || typeof SERVICES === 'undefined') return;
-    grid.innerHTML = SERVICES.map(s => `
-      <div class="service-card">
-        <div class="service-icon">${s.icon}</div>
-        <h3>${s.title}</h3>
-        <p>${s.desc}</p>
+    const list = document.getElementById('servicesGrid');
+    if(!list || typeof SERVICES === 'undefined') return;
+    list.innerHTML = SERVICES.map((s, i) => `
+      <div class="service-row">
+        <span class="service-num">${String(i + 1).padStart(2,'0')}</span>
+        <div class="service-main">
+          <h3>${s.title}</h3>
+          <p>${s.desc}</p>
+        </div>
+        <span class="service-arrow" aria-hidden="true">↗</span>
       </div>
     `).join('');
   })();
 
-  /* ---------- PROCESS: render from data (a real ordered sequence) ---------- */
+  /* ---------- PROCESS: render from data as a connected step-rail ---------- */
   (function process(){
-    const list = document.getElementById('processList');
-    if(!list || typeof PROCESS === 'undefined') return;
-    list.innerHTML = PROCESS.map(step => `
+    const rail = document.getElementById('processList');
+    if(!rail || typeof PROCESS === 'undefined') return;
+    rail.innerHTML = PROCESS.map(step => `
       <div class="process-step">
-        <span class="process-num">${step.num}</span>
+        <div class="process-node">${step.num}</div>
         <h3>${step.title}</h3>
         <p>${step.desc}</p>
       </div>
     `).join('');
   })();
 
-  /* ---------- WHY WORK WITH ME: render from data ---------- */
+  /* ---------- WHY WORK WITH ME: render from data as editorial rows ---------- */
   (function why(){
-    const grid = document.getElementById('whyGrid');
-    if(!grid || typeof WHY_POINTS === 'undefined') return;
-    grid.innerHTML = WHY_POINTS.map(w => `
-      <div class="why-card">
-        <div class="why-icon">${w.icon}</div>
-        <h3>${w.title}</h3>
-        <p>${w.desc}</p>
+    const list = document.getElementById('whyGrid');
+    if(!list || typeof WHY_POINTS === 'undefined') return;
+    list.innerHTML = WHY_POINTS.map((w, i) => `
+      <div class="why-row">
+        <span class="why-num">${String(i + 1).padStart(2,'0')}</span>
+        <div>
+          <h3>${w.title}</h3>
+          <p>${w.desc}</p>
+        </div>
       </div>
     `).join('');
+  })();
+
+  /* ---------- HERO ORBIT: position tech badges around a single ring ----------
+     Radius is derived from the orbit container's own size (not
+     hardcoded per breakpoint), so it stays correctly proportioned
+     at any viewport width, including in-between tablet sizes. */
+  (function heroOrbit(){
+    const orbit = document.getElementById('heroOrbit');
+    const ring = document.getElementById('orbitRing');
+    if(!orbit || !ring || typeof ORBIT_TECH === 'undefined') return;
+
+    function render(){
+      const size = orbit.clientWidth || 460;
+      const radius = (size / 2) * 0.84;
+      const step = 360 / ORBIT_TECH.length;
+      ring.innerHTML = ORBIT_TECH.map((tech, i) => {
+        const angle = i * step;
+        return `<div class="orbit-item" style="transform:rotate(${angle}deg) translateX(${radius}px)">
+          <div class="orbit-badge">
+            <span class="orbit-badge-inner" style="color:${tech.color}">${tech.icon}</span>
+            <span class="orbit-label">${tech.name}</span>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    render();
+
+    if('ResizeObserver' in window){
+      let raf = null;
+      const ro = new ResizeObserver(() => {
+        if(raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(render);
+      });
+      ro.observe(orbit);
+    } else {
+      window.addEventListener('resize', render, { passive: true });
+    }
   })();
 
   /* ---------- TECH STACK: build chip panels from data, tab switching ---------- */
@@ -458,49 +501,96 @@
       });
     });
 
-    /* Modal */
-    const modal = document.getElementById('projectModal');
-    const modalImg = document.getElementById('modalImg');
-    const modalYear = document.getElementById('modalYear');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDesc = document.getElementById('modalDesc');
-    const modalFeatures = document.getElementById('modalFeatures');
-    const modalTags = document.getElementById('modalTags');
-    const modalDemo = document.getElementById('modalDemo');
-    const modalRepo = document.getElementById('modalRepo');
-    const modalClose = document.getElementById('modalClose');
+    /* ---- Case-study overlay: open/close, hash deep-link, next-project cycling ---- */
+    const overlay = document.getElementById('caseOverlay');
+    const caseScroll = document.getElementById('caseScroll');
+    const caseMediaImg = document.getElementById('caseMediaImg');
+    const caseBadge = document.getElementById('caseBadge');
+    const caseTitle = document.getElementById('caseTitle');
+    const caseTagline = document.getElementById('caseTagline');
+    const caseMetaRow = document.getElementById('caseMetaRow');
+    const caseTags = document.getElementById('caseTags');
+    const caseLiveLink = document.getElementById('caseLiveLink');
+    const caseArticle = document.getElementById('caseArticle');
+    const caseIndex = document.getElementById('caseIndex');
+    const caseNext = document.getElementById('caseNext');
+    const caseNextName = document.getElementById('caseNextName');
+    const caseClose = document.getElementById('caseClose');
     let lastFocused = null;
+    let currentId = null;
 
-    function openModal(project){
-      const src = project.logo || project.img;
-      modalImg.src = src;
-      modalImg.alt = project.title + (project.logo ? ' logo' : ' project screenshot');
-      modalImg.classList.toggle('is-logo-panel', !!project.logo);
-      modalYear.textContent = project.badgeText + ' · ' + project.year;
-      modalTitle.textContent = project.title;
-      modalDesc.textContent = project.desc;
-      modalFeatures.innerHTML = project.features.map(f => `<li>${f}</li>`).join('');
-      modalTags.innerHTML = project.tags.map(t => `<span class="pill">${t}</span>`).join('');
-      modalDemo.href = project.demo;
-      modalRepo.href = project.repo;
-      modalDemo.style.display = project.demo === '#' ? 'none' : '';
-      modalRepo.style.display = project.repo === '#' ? 'none' : '';
-      lastFocused = document.activeElement;
-      modal.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-      modalClose.focus();
+    function updateBadge(el, p){
+      el.className = 'status-badge ' + (p.status === 'client' ? 'is-client' : 'is-dev');
+      el.innerHTML = '<span class="dot"></span>' + p.badgeText;
     }
-    function closeModal(){
-      modal.classList.remove('is-open');
+
+    function renderCase(project, { pushHistory = true } = {}){
+      const idx = PROJECTS.findIndex(p => p.id === project.id);
+      currentId = project.id;
+
+      caseMediaImg.src = project.logo || project.img;
+      caseMediaImg.alt = project.title + (project.logo ? ' logo' : ' project screenshot');
+      updateBadge(caseBadge, project);
+      caseTitle.textContent = project.title;
+      caseTagline.textContent = project.short;
+      caseMetaRow.innerHTML = `
+        <div><dt>Built For</dt><dd>${project.builtFor}</dd></div>
+        <div><dt>My Role</dt><dd>${project.role}</dd></div>
+        <div><dt>Capability</dt><dd>${project.capability}</dd></div>
+        <div><dt>Year</dt><dd>${project.year}</dd></div>
+      `;
+      caseTags.innerHTML = project.tags.map(t => `<span class="pill">${t}</span>`).join('');
+      caseLiveLink.href = project.demo;
+      caseLiveLink.style.display = project.demo === '#' ? 'none' : '';
+      caseIndex.textContent = String(idx + 1).padStart(2,'0') + ' / ' + String(PROJECTS.length).padStart(2,'0');
+
+      caseArticle.innerHTML = `
+        <div class="case-block"><div class="field-label">The Problem</div><p>${project.problem}</p></div>
+        <div class="case-block"><div class="field-label">What I Built</div><p>${project.desc}</p><ul>${project.features.map(f => `<li>${f}</li>`).join('')}</ul></div>
+        <div class="case-block"><div class="field-label">A Technical Decision</div><p>${project.decision}</p></div>
+        <div class="case-block"><div class="field-label">Where It Stands</div><p>${project.statusNote}</p></div>
+      `;
+
+      const next = PROJECTS[(idx + 1) % PROJECTS.length];
+      caseNextName.textContent = next.title;
+      caseNext.setAttribute('aria-label', 'View next case study: ' + next.title);
+
+      caseScroll.scrollTop = 0;
+
+      if(pushHistory){
+        const url = '#work/' + project.id;
+        if(location.hash !== url) history.pushState({ case: project.id }, '', url);
+      }
+    }
+
+    function openCase(project, opts){
+      if(!overlay.classList.contains('is-open')){
+        lastFocused = document.activeElement;
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      renderCase(project, opts);
+      caseClose.focus();
+    }
+
+    function closeCase({ pushHistory = true } = {}){
+      if(!overlay.classList.contains('is-open')) return;
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-      if(lastFocused) lastFocused.focus();
+      currentId = null;
+      if(pushHistory && location.hash.startsWith('#work/')){
+        history.pushState({}, '', location.pathname + location.search + '#work');
+      }
+      if(lastFocused && document.contains(lastFocused)) lastFocused.focus();
     }
 
     grid.addEventListener('click', (e) => {
       const card = e.target.closest('.project-card');
       if(!card) return;
       const project = PROJECTS.find(p => p.id === card.getAttribute('data-id'));
-      if(project) openModal(project);
+      if(project) openCase(project);
     });
     grid.addEventListener('keydown', (e) => {
       if(e.key === 'Enter' || e.key === ' '){
@@ -508,23 +598,29 @@
         if(!card) return;
         e.preventDefault();
         const project = PROJECTS.find(p => p.id === card.getAttribute('data-id'));
-        if(project) openModal(project);
+        if(project) openCase(project);
       }
     });
+
+    caseNext.addEventListener('click', () => {
+      const idx = PROJECTS.findIndex(p => p.id === currentId);
+      const next = PROJECTS[(idx + 1) % PROJECTS.length];
+      renderCase(next);
+      caseScroll.focus();
+    });
+
     function getFocusable(container){
       return Array.from(container.querySelectorAll(
         'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
       )).filter(el => el.offsetParent !== null);
     }
 
-    modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+    caseClose.addEventListener('click', () => closeCase());
     document.addEventListener('keydown', (e) => {
-      if(!modal.classList.contains('is-open')) return;
-      if(e.key === 'Escape'){ closeModal(); return; }
+      if(!overlay.classList.contains('is-open')) return;
+      if(e.key === 'Escape'){ closeCase(); return; }
       if(e.key === 'Tab'){
-        const panel = modal.querySelector('.modal-box') || modal;
-        const focusable = getFocusable(panel);
+        const focusable = getFocusable(overlay);
         if(!focusable.length) return;
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
@@ -537,6 +633,19 @@
         }
       }
     });
+
+    /* Deep-link support: #work/<id> opens directly; back/forward closes or switches */
+    function handleHash(){
+      const match = location.hash.match(/^#work\/([a-z0-9-]+)$/i);
+      if(match){
+        const project = PROJECTS.find(p => p.id === match[1]);
+        if(project) openCase(project, { pushHistory: false });
+      } else {
+        closeCase({ pushHistory: false });
+      }
+    }
+    window.addEventListener('popstate', handleHash);
+    if(location.hash.startsWith('#work/')) handleHash();
   })();
 
   /* ---------- FIRST-VISIT "CURRENTLY BUILDING" NOTIFICATION ----------

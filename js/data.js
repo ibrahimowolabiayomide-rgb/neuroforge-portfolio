@@ -22,13 +22,6 @@ const ICONS = {
   git: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8 17.5c3-1 4-3 4-5.5h3.5"/></svg>',
   brain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 4a3 3 0 00-3 3 3 3 0 00-2 5 3 3 0 002 5 3 3 0 003 3 3 3 0 003-3V7a3 3 0 00-3-3z"/><path d="M15 4a3 3 0 013 3 3 3 0 012 5 3 3 0 01-2 5 3 3 0 01-3 3 3 3 0 01-3-3"/></svg>',
   wand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 4V2M15 16v-2M8 9h2M20 9h2M17.8 11.8L19 13M17.8 6.2L19 5M12.2 6.2L11 5M3 21l9-9"/></svg>',
-  globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 6 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-6-3.8-9s1.3-6.3 3.8-9z"/></svg>',
-  stack: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="16" width="16" height="4" rx="1"/></svg>',
-  cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.7 12.6a2 2 0 002 1.6h8.5a2 2 0 002-1.6L21 7H6"/></svg>',
-  compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-4 2 2-6z"/></svg>',
-  ruler: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v6H4z"/><path d="M8 4v3M12 4v3M16 4v3"/></svg>',
-  rocket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2c3 1 5 4 5 8 0 3-1.5 6-5 10-3.5-4-5-7-5-10 0-4 2-7 5-8z"/><circle cx="12" cy="9" r="1.6"/><path d="M8 16l-3 4M16 16l3 4"/></svg>',
-  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12l5 5L20 6"/></svg>',
 };
 
 /* Company founded 2020 — used to compute a genuine, always-accurate
@@ -71,32 +64,26 @@ const SKILLS = {
 /* ---------- SERVICES ---------- */
 const SERVICES = [
   {
-    icon: ICONS.globe,
     title: 'Business & Marketing Websites',
     desc: 'Fast, professional websites for companies and services — built to load quickly, rank well, and represent the business properly online.',
   },
   {
-    icon: ICONS.stack,
     title: 'Full-Stack Web Applications',
     desc: 'End-to-end applications — a working interface backed by real APIs, databases, and authentication, not just a front-end mockup.',
   },
   {
-    icon: ICONS.layers,
     title: 'SaaS Platforms & Dashboards',
     desc: 'Multi-user platforms with accounts, roles, and data views — the kind of product a team logs into every day.',
   },
   {
-    icon: ICONS.cart,
     title: 'E-Commerce & Marketplaces',
     desc: 'Storefronts and marketplace flows — product catalogs, checkout, payments, and seller or vendor onboarding.',
   },
   {
-    icon: ICONS.server,
     title: 'Backend & API Systems',
     desc: 'The infrastructure behind a product — databases, authentication, payment integration, and APIs designed to hold up under real use.',
   },
   {
-    icon: ICONS.brain,
     title: 'AI-Integrated Applications',
     desc: 'Products that use LLM APIs for real functionality — not a chatbot bolted on, but AI used where it genuinely improves the experience.',
   },
@@ -114,12 +101,12 @@ const PROCESS = [
 
 /* ---------- WHY WORK WITH ME ---------- */
 const WHY_POINTS = [
-  { icon: ICONS.stack, title: 'Full-Stack Capability', desc: 'One developer who can own the interface, the backend, and the database — instead of coordinating three.' },
-  { icon: ICONS.check, title: 'End-to-End Delivery', desc: 'From first discovery call to a deployed, production URL — not a handoff halfway through.' },
-  { icon: ICONS.compass, title: 'Real Problem-Solving', desc: 'I care about whether the thing actually works for the people using it, not just whether it compiles.' },
-  { icon: ICONS.bolt, title: 'Clean, Maintainable Architecture', desc: 'Code that someone else — or future me — can actually read, extend, and debug.' },
-  { icon: ICONS.rocket, title: 'Deployment You Can Rely On', desc: 'Comfortable taking a project from local development to a live, properly configured production environment.' },
-  { icon: ICONS.wand, title: 'Straightforward Communication', desc: 'Clear updates on progress and honest answers about scope, timeline, and tradeoffs.' },
+  { title: 'Full-Stack Capability', desc: 'One developer who can own the interface, the backend, and the database — instead of coordinating three.' },
+  { title: 'End-to-End Delivery', desc: 'From first discovery call to a deployed, production URL — not a handoff halfway through.' },
+  { title: 'Real Problem-Solving', desc: 'I care about whether the thing actually works for the people using it, not just whether it compiles.' },
+  { title: 'Clean, Maintainable Architecture', desc: 'Code that someone else — or future me — can actually read, extend, and debug.' },
+  { title: 'Deployment You Can Rely On', desc: 'Comfortable taking a project from local development to a live, properly configured production environment.' },
+  { title: 'Straightforward Communication', desc: 'Clear updates on progress and honest answers about scope, timeline, and tradeoffs.' },
 ];
 
 /* ---------- PROJECTS ----------
@@ -140,6 +127,9 @@ const PROJECTS = [
     capability: 'Business website with lead-gen & WhatsApp integration',
     short: 'Website for a perimeter security & architectural consultancy in Ibadan, Nigeria.',
     desc: 'A full business website built for Imperial Shelter-Tech Konsult — a perimeter security and architectural consultancy based in Ibadan, Nigeria. The site presents their services (rigid panel mesh fencing, solar-powered electric fencing, perimeter security systems, architectural design & construction, land surveying, and CCTV installation), a project portfolio, and a lead-generation contact flow with WhatsApp integration.',
+    problem: 'Imperial Shelter-Tech Konsult had real, completed installation work — but no professional web presence to show it. Prospective clients had no way to see past projects, understand the service range, or get in touch without already having a phone number.',
+    decision: 'Rather than build a custom lead-capture form and backend to store it, I wired the quote-request flow directly into WhatsApp with a scannable QR code — the channel their actual customers already use, with no extra infrastructure to maintain.',
+    statusNote: 'Live in production, and currently the client\'s primary web presence.',
     features: [
       'Service pages covering all six of the client\'s core offerings',
       'Project portfolio showcasing completed installations and builds',
@@ -166,6 +156,9 @@ const PROJECTS = [
     capability: 'Marketplace, seller onboarding & subscription payments',
     short: 'A relationship, lifestyle, and marketplace platform — buyer/seller accounts, storefronts, and subscriptions.',
     desc: 'Veyra is a full-stack platform that brings relationship-focused experiences, marketplace discovery, and commerce into one product. It combines buyer and seller accounts, a "Become a Seller" onboarding flow, seller dashboards and storefronts, and tiered membership plans, built around the idea of making a complex ecosystem feel simple to navigate.',
+    problem: 'The idea was to combine relationship-focused content, lifestyle discovery, and a real marketplace into one coherent product — instead of three separate, half-built ideas competing for attention.',
+    decision: 'Chose Supabase over wiring up a separate auth provider plus a standalone ORM — it bundles Postgres, authentication, and row-level security in one place, which matters when you\'re building solo and don\'t have a backend team to lean on.',
+    statusNote: 'Active development. The core marketplace, seller onboarding, and Paystack integration are built; still being refined ahead of a public launch.',
     features: [
       'Marketplace with Buy Now purchasing',
       'Buyer and Seller account types with dedicated onboarding',
@@ -193,6 +186,9 @@ const PROJECTS = [
     capability: 'Private, polished consumer app experience',
     short: 'A private, premium love-story app — letters, memories, and music made to be relived.',
     desc: 'Amoura is a private, premium experience for preserving a relationship\'s letters, memories, and music in one place, designed to be revisited over time. It\'s currently in active development.',
+    problem: 'The idea was a private, deliberately small space for letters, memories, and music — not another social app competing for attention or engagement time.',
+    decision: 'Kept the feature scope intentionally narrow rather than adding capability for its own sake — for something this personal, the restraint is part of the point, not a limitation to fix later.',
+    statusNote: 'Active development, early stage.',
     features: [
       'Private, personal space for letters and memories',
       'Music integration as part of the experience',
@@ -221,4 +217,46 @@ const ROLES = [
   'Digital Product Builder',
   'Backend Architect',
   'AI Integration Specialist'
+];
+
+/* ---------- HERO ORBIT ----------
+   The real, current stack shown as the hero's visual centerpiece —
+   matches SKILLS above, not a padded generic list. Icons are original,
+   simplified monogram/glyph marks in each technology's associated
+   color (not traced reproductions of official logo artwork) — kept
+   consistent with the rest of the site's own line-art icon language
+   rather than mixing in realistic brand assets. */
+const ORBIT_TECH = [
+  {
+    name: 'Next.js', color: 'var(--text)',
+    icon: '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.4"/><path d="M9 8v8M9 8l7 8.3M15.2 8v5.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  },
+  {
+    name: 'React', color: '#61DAFB',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>'
+  },
+  {
+    name: 'TypeScript', color: '#3E8ED0',
+    icon: '<svg viewBox="0 0 24 24" fill="none"><text x="12" y="16.5" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" fill="currentColor">TS</text></svg>'
+  },
+  {
+    name: 'JavaScript', color: '#E8C547',
+    icon: '<svg viewBox="0 0 24 24" fill="none"><text x="12" y="16.5" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="700" fill="currentColor">JS</text></svg>'
+  },
+  {
+    name: 'Node.js', color: '#5FA96A',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 2.5l8 4.6v9.8l-8 4.6-8-4.6V7.1z"/></svg>'
+  },
+  {
+    name: 'Python', color: '#4B8BBE',
+    icon: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3c-3.5 0-4.4 1.2-4.4 2.7v2h4.6v.9H6.2C4.4 8.6 3 9.7 3 12s1.4 3.4 3.2 3.4h1.5v-2.2c0-2 1.7-3.4 3.5-3.4h4.1c1.6 0 2.9-1.3 2.9-2.9V5.7C18.2 4.2 16.5 3 12 3z" fill="#4B8BBE"/><path d="M12 21c3.5 0 4.4-1.2 4.4-2.7v-2h-4.6v-.9h6c1.8 0 3.2-1.1 3.2-3.4s-1.4-3.4-3.2-3.4h-1.5v2.2c0 2-1.7 3.4-3.5 3.4H8.7c-1.6 0-2.9 1.3-2.9 2.9v2.6C5.8 19.8 7.5 21 12 21z" fill="#F4D03F"/></svg>'
+  },
+  {
+    name: 'PostgreSQL', color: '#5C8FC9',
+    icon: '<svg viewBox="0 0 24 24" fill="none"><text x="12" y="16" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="700" fill="currentColor">Pg</text></svg>'
+  },
+  {
+    name: 'Supabase', color: '#3ECF8E',
+    icon: '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="13,2 4,14 11,14 9,22 20,9 13,9"/></svg>'
+  },
 ];

@@ -1,37 +1,65 @@
 /* ============================================
-   PROCESS — how I build
-   A numbered sequence is appropriate here: it is
-   an actual ordered process, not decoration.
+   PROCESS — connected step-rail
+   A horizontal rail on desktop (steps genuinely
+   run in sequence, so a connecting line earns its
+   place here), collapsing to a vertical rail on
+   mobile rather than stacked boxes.
    ============================================ */
 
-.process-list{
+.process-rail{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:var(--space-4);
-}
-@media (max-width:900px){ .process-list{ grid-template-columns:repeat(2,1fr); } }
-@media (max-width:600px){ .process-list{ grid-template-columns:1fr; } }
-
-.process-step{
+  grid-template-columns:repeat(6,1fr);
+  gap:var(--space-3);
   position:relative;
-  padding:var(--space-4);
+}
+.process-rail::before{
+  content:'';
+  position:absolute;
+  top:15px; left:calc(100%/12); right:calc(100%/12);
+  height:1px;
+  background:var(--border);
+}
+@media (max-width:900px){
+  .process-rail{ grid-template-columns:repeat(3,1fr); row-gap:var(--space-5); }
+  .process-rail::before{ display:none; }
+}
+@media (max-width:560px){
+  .process-rail{ grid-template-columns:1fr; gap:0; }
+  .process-rail::before{ display:none; }
+}
+
+.process-step{ position:relative; }
+.process-node{
+  width:31px; height:31px;
+  border-radius:50%;
   border:1px solid var(--border);
-  border-radius:var(--radius-md);
-  transition:transform .3s var(--ease-out), border-color .3s var(--ease-out), box-shadow .3s var(--ease-out);
-}
-.process-step:hover{
-  transform:translateY(-3px);
-  border-color:color-mix(in srgb, var(--accent) 35%, var(--border));
-  box-shadow:var(--shadow-sm);
-}
-@media (prefers-reduced-motion: reduce){ .process-step:hover{ transform:none; } }
-.process-num{
+  background:var(--bg);
+  display:flex; align-items:center; justify-content:center;
   font-family:var(--font-mono);
-  font-size:12px;
-  letter-spacing:.06em;
-  color:var(--accent-text);
-  display:block;
-  margin-bottom:10px;
+  font-size:11px;
+  color:var(--text-dim);
+  margin-bottom:var(--space-3);
+  position:relative;
+  z-index:1;
+  transition:border-color .3s var(--ease-out), color .3s var(--ease-out), background .3s var(--ease-out);
 }
-.process-step h3{ font-size:16px; font-weight:700; margin:0 0 6px; }
-.process-step p{ font-size:13.5px; line-height:1.6; color:var(--text-dim); margin:0; }
+.process-step:hover .process-node{
+  border-color:var(--accent);
+  color:var(--accent-text);
+  background:color-mix(in srgb, var(--accent) 10%, var(--bg));
+}
+.process-step h3{ font-size:15px; font-weight:700; margin:0 0 6px; }
+.process-step p{ font-size:13px; line-height:1.6; color:var(--text-dim); margin:0; max-width:200px; }
+
+@media (max-width:560px){
+  .process-step{
+    display:grid;
+    grid-template-columns:31px 1fr;
+    gap:var(--space-3);
+    padding:var(--space-3) 0;
+    border-bottom:1px solid var(--border);
+  }
+  .process-step:last-child{ border-bottom:none; }
+  .process-node{ margin-bottom:0; }
+  .process-step p{ max-width:none; }
+}
