@@ -1,0 +1,143 @@
+/* ==========================================================================
+   Neuroforge Phase 3: motion
+   One animation language for the whole site.
+
+   Rules
+   - Hidden "before" states exist only while <html class="anim"> is present.
+     theme-init.js adds that class only when the visitor allows motion, and
+     removes it after a few seconds if motion.js never started. Content can
+     therefore never be stranded invisible.
+   - Entrances use opacity, translate and scale only (compositor friendly).
+     Hover and base states use transform, so the two never fight.
+   - Scroll-linked effects use CSS scroll and view timelines where supported
+     and are plain static layouts everywhere else. Nothing touches the wheel,
+     the scroll position or the scroll speed.
+   - Timings come from the tokens in base.css.
+   ========================================================================== */
+
+/* Stagger index helpers: <span class="d3"> delays by three steps. */
+.d0 { --i: 0; } .d1 { --i: 1; } .d2 { --i: 2; } .d3 { --i: 3; } .d4 { --i: 4; } .d5 { --i: 5; }
+.d6 { --i: 6; } .d7 { --i: 7; } .d8 { --i: 8; } .d9 { --i: 9; } .d10 { --i: 10; } .d11 { --i: 11; } .d12 { --i: 12; }
+[data-reveal="stagger"] > :nth-child(1) { --i: 0; } [data-reveal="stagger"] > :nth-child(2) { --i: 1; }
+[data-reveal="stagger"] > :nth-child(3) { --i: 2; } [data-reveal="stagger"] > :nth-child(4) { --i: 3; }
+[data-reveal="stagger"] > :nth-child(5) { --i: 4; } [data-reveal="stagger"] > :nth-child(6) { --i: 5; }
+[data-reveal="stagger"] > :nth-child(7) { --i: 6; } [data-reveal="stagger"] > :nth-child(8) { --i: 7; }
+[data-reveal="stagger"] > :nth-child(9) { --i: 8; } [data-reveal="stagger"] > :nth-child(n+10) { --i: 9; }
+
+@keyframes rise-in { from { opacity: 0; translate: 0 var(--rise); } }
+@keyframes word-rise { from { translate: 0 108%; } }
+@keyframes grow-x { from { transform: scaleX(0); } }
+@keyframes grow-y { from { transform: scaleY(0); } }
+@keyframes draw-line { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes pop-in { from { opacity: 0; scale: 0.4; } }
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* ---------- 1. Hero: a one-time entrance, sequenced ---------- */
+  .anim .hero-title .w > span,
+  .anim .case-title .w > span {
+    animation: word-rise 1000ms var(--ease-out) both;
+    animation-delay: calc(220ms + var(--i, 0) * 55ms);
+  }
+  .anim .hero-in {
+    animation: rise-in 900ms var(--ease-out) both;
+    animation-delay: calc(560ms + var(--i, 0) * 100ms);
+  }
+  .anim .hero-mark path { stroke-dasharray: 1; animation: draw-line 2600ms var(--ease-in-out) 400ms both; }
+  .anim .pipeline::before { animation: grow-x 1700ms var(--ease-in-out) 1100ms both; }
+  .anim .pipeline li { animation: rise-in 800ms var(--ease-out) both; animation-delay: calc(1250ms + var(--i, 0) * 320ms); }
+  .anim .pipeline li::before { animation: pop-in 600ms var(--ease-out) both; animation-delay: calc(1250ms + var(--i, 0) * 320ms); }
+  @media (max-width: 859px) {
+    .anim .pipeline::before { animation-name: grow-y; }
+  }
+
+  /* ---------- 2. Section reveals: each kind has its own character ---------- */
+  .anim [data-reveal="rise"],
+  .anim [data-reveal="stagger"] > * {
+    opacity: 0;
+    translate: 0 var(--rise);
+    transition: opacity var(--t-slow) var(--ease-out), translate var(--t-slow) var(--ease-out);
+    transition-delay: calc(var(--i, 0) * var(--step));
+  }
+  .anim [data-reveal="rise"].is-in,
+  .anim [data-reveal="stagger"].is-in > * { opacity: 1; translate: none; }
+
+  /* Headings and statements: words rise out of a mask. */
+  .anim [data-reveal="words"] .w > span {
+    translate: 0 108%;
+    transition: translate var(--t-slow) var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 38ms);
+  }
+  .anim [data-reveal="words"].is-in .w > span { translate: none; }
+
+  /* Project visuals: a wipe, with the content settling inside it. */
+  /* The clip sits on a child: an element clipped to nothing reports no intersection, so the
+     observed element itself must keep its box. */
+  .anim [data-reveal="wipe"] picture {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 1100ms var(--ease-in-out);
+  }
+  .anim [data-reveal="wipe"].is-in picture { clip-path: inset(0 0 0 0); }
+  .anim [data-reveal="wipe"] img { scale: 1.08; transition: scale 1500ms var(--ease-out); }
+  .anim [data-reveal="wipe"].is-in img { scale: 1; }
+  .anim [data-reveal="wipe"] figcaption { opacity: 0; transition: opacity var(--t-slow) ease 700ms; }
+  .anim [data-reveal="wipe"].is-in figcaption { opacity: 1; }
+
+  /* Technical drawings: lines draw, then nodes land. */
+  .anim [data-reveal="draw"] .draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset var(--t-draw) var(--ease-in-out);
+    transition-delay: calc(var(--i, 0) * 160ms);
+  }
+  .anim [data-reveal="draw"].is-in .draw { stroke-dashoffset: 0; }
+  .anim [data-reveal="draw"] .pop,
+  .anim [data-reveal="draw"] .fade {
+    opacity: 0;
+    transition: opacity var(--t-base) ease, scale var(--t-base) var(--ease-out);
+    transition-delay: calc(500ms + var(--i, 0) * 120ms);
+  }
+  .anim [data-reveal="draw"] .pop { transform-box: fill-box; transform-origin: center; scale: 0.4; }
+  .anim [data-reveal="draw"].is-in .pop,
+  .anim [data-reveal="draw"].is-in .fade { opacity: 1; scale: 1; }
+
+  /* Stacked layers slide in from the side, one after another. */
+  .anim [data-reveal="layers"] .layer { opacity: 0; translate: 56px 0; transition: opacity var(--t-slow) var(--ease-out), translate var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out); transition-delay: calc(var(--i, 0) * 120ms), calc(var(--i, 0) * 120ms), 0ms; }
+  .anim [data-reveal="layers"].is-in .layer { opacity: 1; translate: none; }
+  .anim [data-reveal="layers"] .layer:nth-child(1) { --i: 0; } .anim [data-reveal="layers"] .layer:nth-child(2) { --i: 1; }
+  .anim [data-reveal="layers"] .layer:nth-child(3) { --i: 2; } .anim [data-reveal="layers"] .layer:nth-child(4) { --i: 3; }
+
+  /* Paper sheets drop in and settle. */
+  .anim [data-reveal="sheets"] .sheet { opacity: 0; translate: 0 -48px; transition: opacity var(--t-slow) var(--ease-out), translate 1100ms var(--ease-out), transform var(--t-slow) var(--ease-out); transition-delay: calc(var(--i, 0) * 160ms), calc(var(--i, 0) * 160ms), 0ms; }
+  .anim [data-reveal="sheets"].is-in .sheet { opacity: 1; translate: none; }
+  .anim [data-reveal="sheets"] .sheet-letters { --i: 0; } .anim [data-reveal="sheets"] .sheet-music { --i: 1; } .anim [data-reveal="sheets"] .sheet-memories { --i: 2; }
+
+  /* ---------- 3. Pointer depth (fine pointers only, set by motion.js) ---------- */
+  [data-depth] { will-change: translate; }
+
+  /* ---------- 4. Scroll-linked, progressive enhancement ---------- */
+  @supports (animation-timeline: scroll()) {
+    .progress { animation: grow-x linear both; animation-timeline: scroll(root); transform: none; }
+    .hero-bg { animation: hero-drift linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+    @keyframes hero-drift { to { transform: translateY(14vh); } }
+
+    .parallax { animation: parallax linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    @keyframes parallax { from { transform: translateY(36px); } to { transform: translateY(-36px); } }
+
+    .steps::after { animation: grow-y-to linear both; animation-timeline: view(); animation-range: cover 18% cover 78%; }
+    @keyframes grow-y-to { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  }
+
+  /* ---------- 5. Page to page ---------- */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: fade-out 180ms ease both; }
+  ::view-transition-new(root) { animation: fade-in 320ms ease both; }
+  @keyframes fade-out { to { opacity: 0; } }
+  @keyframes fade-in { from { opacity: 0; } }
+}
+
+/* Without scroll timelines the step connector is simply drawn. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .progress { display: none; }
+}

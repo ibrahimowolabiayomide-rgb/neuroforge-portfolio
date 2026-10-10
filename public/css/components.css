@@ -1,0 +1,264 @@
+/* ==========================================================================
+   Neuroforge Phase 3: components
+   Header and navigation, progress bar, buttons, links, ledger, chips, form,
+   footer. No component depends on a particular page.
+   ========================================================================== */
+
+/* ---------- Scroll progress ---------- */
+.progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 3px;
+  z-index: 60;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--ember-fill), var(--gold));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--line);
+}
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: var(--header-h);
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-family: var(--display);
+  font-size: 1.3125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+.brand:hover { color: var(--text); text-decoration: none; }
+.brand-mark { width: 28px; height: 28px; flex: none; }
+.brand-mark rect { fill: var(--ember-fill); }
+.brand-mark path { fill: none; stroke: var(--on-ember); stroke-width: 3; stroke-linecap: square; }
+
+.nav-panel { margin-left: auto; }
+.nav-list { display: flex; align-items: center; gap: 4px; }
+.nav-list a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 12px;
+  font-size: 0.9688rem;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color var(--t-fast) ease;
+}
+.nav-list a::after {
+  content: "";
+  position: absolute;
+  left: 12px; right: 12px; bottom: 8px;
+  height: 2px;
+  background: var(--ember-fill);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--t-base) var(--ease-out);
+}
+.nav-list a:hover { color: var(--text); }
+.nav-list a:hover::after,
+.nav-list a[aria-current]::after { transform: scaleX(1); }
+.nav-list a[aria-current] { color: var(--text); }
+
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.theme-toggle, .nav-toggle {
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 0.875rem;
+  color: var(--dim);
+  background: transparent;
+  border: 1px solid var(--control);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color var(--t-fast) ease, border-color var(--t-fast) ease, background-color var(--t-fast) ease;
+}
+.theme-toggle:hover, .nav-toggle:hover { color: var(--text); border-color: var(--text); }
+.theme-toggle[hidden], .nav-toggle[hidden] { display: none; }
+.nav-toggle { display: none; align-items: center; gap: 10px; }
+.nav-toggle .bars { position: relative; width: 16px; height: 10px; }
+.nav-toggle .bars::before, .nav-toggle .bars::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: currentColor;
+  transition: transform var(--t-base) var(--ease-out), top var(--t-base) var(--ease-out);
+}
+.nav-toggle .bars::before { top: 0; }
+.nav-toggle .bars::after { top: 8px; }
+.nav-toggle[aria-expanded="true"] .bars::before { top: 4px; transform: rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .bars::after { top: 4px; transform: rotate(-45deg); }
+
+@media (max-width: 859px) {
+  .site-header .wrap { flex-wrap: wrap; }
+  .header-actions { margin-left: auto; }
+  .nav-toggle { display: inline-flex; }
+  .nav-panel { order: 3; width: 100%; margin-left: 0; }
+  .nav-panel[hidden] { display: none; }
+  .nav-list { flex-direction: column; align-items: stretch; gap: 0; padding-bottom: 12px; border-top: 1px solid var(--line); }
+  .nav-list a { display: flex; min-height: 52px; font-size: 1.125rem; border-bottom: 1px solid var(--line); padding-inline: 2px; }
+  .nav-list a::after { display: none; }
+  .nav-list a[aria-current] { color: var(--ember); }
+}
+
+/* Narrow phones: keep brand, theme switch and menu on one row. */
+@media (max-width: 479px) {
+  .site-header .wrap { gap: 8px; }
+  .brand { font-size: 1.125rem; gap: 8px; }
+  .brand-mark { width: 26px; height: 26px; }
+  .header-actions { gap: 6px; }
+  .theme-toggle, .nav-toggle { padding: 0 10px; font-size: 0.8125rem; }
+}
+@media (max-width: 359px) {
+  .brand { font-size: 1rem; gap: 6px; }
+  .theme-toggle { padding: 0 8px; }
+}
+@media (max-width: 419px) {
+  .nav-toggle .label { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .nav-toggle { min-width: 44px; justify-content: center; gap: 0; }
+}
+
+/* ---------- Buttons and links ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 0 24px;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color var(--t-fast) ease, border-color var(--t-fast) ease,
+              color var(--t-fast) ease, transform var(--t-base) var(--ease-out);
+}
+.btn svg { width: 16px; height: 16px; flex: none; transition: transform var(--t-base) var(--ease-out); }
+.btn:hover svg { transform: translateX(4px); }
+.btn-ember { background: var(--ember-fill); color: var(--on-ember); }
+.btn-ember:hover { background: var(--ember-fill-hover); color: var(--on-ember); text-decoration: none; transform: translateY(-2px); }
+.btn-line { color: var(--text); border-color: var(--control); background: transparent; }
+.btn-line:hover { border-color: var(--text); color: var(--text); text-decoration: none; transform: translateY(-2px); }
+.btn-project { background: var(--p-fill); color: var(--p-on, #1a0b05); }
+.btn-project:hover { color: var(--p-on, #1a0b05); text-decoration: none; transform: translateY(-2px); filter: brightness(1.08); }
+.btn[aria-disabled="true"] { opacity: 0.65; cursor: progress; transform: none; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+@media (max-width: 479px) {
+  .actions .btn { flex: 1 1 100%; }
+}
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--p-accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  align-self: start;
+}
+.link-arrow svg { width: 14px; height: 14px; transition: transform var(--t-base) var(--ease-out); }
+.link-arrow:hover { color: var(--text); }
+.link-arrow:hover svg { transform: translateX(4px); }
+
+/* ---------- Ledger: a definition list that reads like a spec sheet ---------- */
+.ledger { border-top: 1px solid var(--line); }
+.ledger > div { display: grid; gap: 2px 32px; padding-block: 14px; border-bottom: 1px solid var(--line); }
+.ledger dt { font-family: var(--mono); font-size: 0.8125rem; color: var(--faint); padding-top: 3px; }
+.ledger dd { color: var(--text); max-width: 62ch; }
+@media (min-width: 720px) {
+  .ledger > div { grid-template-columns: 11rem minmax(0, 1fr); }
+}
+
+/* ---------- Tags ---------- */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tags li {
+  padding: 4px 10px;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--dim);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--p-accent);
+}
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+/* ---------- Contact form (the behaviour lives in site.js and api/contact.js) ---------- */
+.field { margin-bottom: 22px; }
+.field label { display: block; margin-bottom: 8px; font-size: 0.9688rem; font-weight: 600; }
+.field input, .field textarea {
+  display: block;
+  width: 100%;
+  padding: 13px 15px;
+  font: inherit;
+  font-size: 1rem;   /* 16px stops iOS zooming into the field */
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--field);
+  border: 1px solid var(--control);
+  border-radius: var(--radius);
+  transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease;
+}
+.field textarea { min-height: 10rem; resize: vertical; }
+.field input:hover, .field textarea:hover { border-color: var(--text); }
+.field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; border-color: var(--teal); }
+.field [aria-invalid="true"] { border-color: var(--danger); box-shadow: inset 0 0 0 1px var(--danger); }
+.field-error { margin: 8px 0 0; font-size: 0.9375rem; color: var(--danger); }
+.field-error[hidden] { display: none; }
+.hint { margin: 8px 0 0; font-size: 0.875rem; color: var(--faint); }
+.form-intro { margin-bottom: 24px; color: var(--dim); }
+/* Honeypot: off-screen and out of the tab order. Not display:none, so naive bots still fill it. */
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.form-status { margin-top: 22px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--raised); }
+.form-status[hidden] { display: none; }
+.form-status.is-error { border-color: var(--danger); }
+.form-status.is-error strong { color: var(--danger); }
+.form-status.is-success { border-color: var(--success); }
+.form-status.is-success strong { color: var(--success); }
+.form-status strong { display: block; margin-bottom: 2px; font-weight: 700; }
+.form-status p { margin: 0; color: var(--text); }
+.form-status .btn { margin-top: 16px; }
+.sent-panel[hidden], .contact-form[hidden] { display: none; }
+
+/* ---------- Footer ---------- */
+.site-footer { border-top: 1px solid var(--line); padding-block: 56px 48px; color: var(--dim); font-size: 0.9688rem; }
+.footer-grid { display: grid; gap: 32px; }
+.footer-brand { font-family: var(--display); font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px; }
+.footer-nav ul { display: flex; flex-wrap: wrap; gap: 0 22px; }
+.footer-nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--dim); text-decoration-color: var(--line); }
+.footer-nav a:hover { color: var(--text); }
+.footer-legal { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 0.875rem; color: var(--faint); display: flex; flex-wrap: wrap; gap: 6px 24px; }
+@media (min-width: 760px) {
+  .footer-grid { grid-template-columns: minmax(0, 1fr) auto; align-items: start; }
+}
+
+/* ---------- Plain pages (404, form fallback) ---------- */
+.notice-page { padding-block: clamp(72px, 12vw, 160px); max-width: 44rem; }
+.notice-page h1 { font-size: clamp(2.5rem, 1.5rem + 4vw, 4.5rem); margin-bottom: 24px; }
+.notice-page ul { margin: 0 0 1em 1.2em; list-style: disc; }

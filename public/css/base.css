@@ -1,0 +1,282 @@
+/* ==========================================================================
+   Neuroforge Phase 3: base
+   Fonts, design tokens, reset, typography, layout primitives.
+
+   Colour model
+   - Page sections follow the visitor's theme (warm paper or deep ink).
+   - Stages (header, hero, project chapters, contact, footer) are always dark.
+     A .stage element redefines the tokens, so everything inside uses the same
+     variable names and never needs a theme-specific rule.
+   - Each project gets its own hue through a [data-project] scope.
+   ========================================================================== */
+
+/* ---------- Fonts (self-hosted, SIL OFL; licences sit beside the files) ---------- */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/bricolage-var.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Sans";
+  src: url("/assets/fonts/instrument-sans-var.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/assets/fonts/instrument-serif-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/jetbrains-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Local fallbacks sized to the web fonts so the swap does not move the layout (approximate). */
+@font-face {
+  font-family: "Bricolage Fallback";
+  src: local("Arial");
+  size-adjust: 103%;
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Instrument Sans Fallback";
+  src: local("Arial");
+  size-adjust: 102%;
+  ascent-override: 96%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  color-scheme: dark;
+
+  /* Page surfaces follow the theme. */
+  --bg:        light-dark(#f6f0e6, #0b0a10);
+  --raised:    light-dark(#eee6d6, #14111c);
+  --raised-2:  light-dark(#e6dcc8, #1c1827);
+  --line:      light-dark(#d6cbb5, #2e2839);
+  --control:   light-dark(#857b90, #7a718c);   /* control borders: 3:1 or better */
+  --field:     light-dark(#ffffff, #0b0a10);
+  --text:      light-dark(#1b1424, #f4efe6);
+  --dim:       light-dark(#4a4156, #bdb5c8);
+  --faint:     light-dark(#655c72, #9189a0);
+  --ember:     light-dark(#b33a0f, #ff8f63);   /* ember as text */
+  --teal:      light-dark(#0a7568, #36d6c3);   /* technical signal as text */
+  --danger:    light-dark(#a82a22, #ff9a93);
+  --success:   light-dark(#17683c, #86e0a8);
+
+  /* Fixed brand fills. */
+  --ember-fill: #ff6b3a;
+  --ember-fill-hover: #ff8257;
+  --on-ember: #1a0b05;
+  --teal-fill: #36d6c3;
+  --gold: #ffc857;
+
+  /* Project scope defaults to the brand. */
+  --p-accent: var(--ember);
+  --p-fill: var(--ember-fill);
+
+  /* Type */
+  --display: "Bricolage Grotesque", "Bricolage Fallback", "Arial Black", Arial, sans-serif;
+  --sans: "Instrument Sans", "Instrument Sans Fallback", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Layout */
+  --gutter: clamp(20px, 4.5vw, 56px);
+  --page: 78rem;
+  --header-h: 64px;
+  --radius: 6px;
+
+  /* Motion language: one set of timings for the whole site. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-fast: 160ms;
+  --t-base: 480ms;
+  --t-slow: 900ms;
+  --t-draw: 1400ms;
+  --step: 70ms;           /* stagger interval */
+  --rise: 28px;           /* default travel for entrances */
+}
+:root[data-theme="dark"]  { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) { color-scheme: light; }
+}
+@media (max-width: 719px) {
+  :root { --rise: 18px; --header-h: 60px; }
+}
+
+/* Stage: always dark, whatever the page theme. */
+.stage {
+  color-scheme: dark;
+  --bg: #0b0a10;
+  --raised: #14111c;
+  --raised-2: #1c1827;
+  --line: #2e2839;
+  --control: #7a718c;
+  --field: #0b0a10;
+  --text: #f4efe6;
+  --dim: #bdb5c8;
+  --faint: #9189a0;
+  --ember: #ff8f63;
+  --teal: #36d6c3;
+  --danger: #ff9a93;
+  --success: #86e0a8;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Project scopes. Each sets the panel colours the stage uses. */
+[data-project="veyra"] {
+  --bg: #1b1238; --raised: #241a48; --raised-2: #2d2158; --line: #3d3170;
+  --text: #f4efe6; --dim: #c9c0dd; --faint: #a79bc4;
+  --p-accent: #b9a5ff; --p-fill: #7c5cff; --p-on: #ffffff; --p-2: #ff7ab8;
+  --control: #8a7cb8;
+}
+[data-project="amoura"] {
+  --bg: #2b1222; --raised: #381a2e; --raised-2: #452139; --line: #5a2c49;
+  --text: #fff1e8; --dim: #e4c9cf; --faint: #c9a3b0;
+  --p-accent: #ff9db7; --p-fill: #ff9db7; --p-on: #2b1222; --p-2: #ffd9b8;
+  --control: #b07a92;
+}
+[data-project="imperial"] {
+  --bg: #0e1b2e; --raised: #14243a; --raised-2: #1b2f4a; --line: #28405f;
+  --text: #eaf2ff; --dim: #b7c6db; --faint: #94a8c2;
+  --p-accent: #7db8ff; --p-fill: #7db8ff; --p-on: #0e1b2e; --p-2: #ffc857;
+  --control: #6f8cb0;
+}
+
+/* ---------- Reset and base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin: 0;
+  text-wrap: balance;
+}
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+dl, dd, figure, blockquote { margin: 0; }
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+button { font: inherit; color: inherit; }
+
+a {
+  color: var(--ember);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: color var(--t-fast) ease, text-decoration-color var(--t-fast) ease;
+}
+a:hover { color: var(--text); text-decoration-thickness: 2px; }
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+.skip-link {
+  position: fixed;
+  left: var(--gutter);
+  top: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--ember-fill);
+  color: var(--on-ember);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius);
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; color: var(--on-ember); }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.nowrap { white-space: nowrap; }
+
+/* ---------- Typography ---------- */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 24px;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  color: var(--faint);
+}
+.eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--p-fill);
+  flex: none;
+}
+/* Italic serif accent used inside display headings. */
+h1 em, h2 em, h3 em, .intro-text em, .accent-serif {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-size: 1.1em;
+  line-height: 0.9;
+}
+.h-section { font-size: clamp(2.1rem, 1.1rem + 3.6vw, 4.25rem); }
+.lede { font-size: clamp(1.125rem, 1.02rem + 0.5vw, 1.375rem); line-height: 1.55; color: var(--dim); max-width: 58ch; }
+.mono { font-family: var(--mono); font-size: 0.8125rem; }
+.prose { max-width: 64ch; }
+.prose p { color: var(--dim); }
+.prose strong { color: var(--text); font-weight: 600; }
+
+/* ---------- Layout ---------- */
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--page));
+  margin-inline: auto;
+}
+.section { padding-block: clamp(72px, 10vw, 152px); position: relative; }
+.section-head { display: grid; gap: 20px; margin-bottom: clamp(40px, 6vw, 80px); }
+@media (min-width: 900px) {
+  .section-head { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: end; column-gap: 64px; }
+}
+.section-head .lede { margin: 0; }

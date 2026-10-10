@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://neuroforge-portfolio.vercel.app/sitemap.xml
