@@ -134,6 +134,7 @@
 .chapter {
   position: relative;
   overflow: hidden;
+  overflow: clip;   /* clips the same way but is not a scroll container, so view timelines inside it can run */
   padding-block: clamp(64px, 9vw, 136px);
   border-top: 1px solid var(--line);
 }
@@ -383,6 +384,7 @@
 .channels .value { flex: 1; min-width: 0; overflow-wrap: break-word; }
 .channels svg { width: 16px; height: 16px; flex: none; opacity: 0.8; transition: transform var(--t-base) var(--ease-out); }
 .channels a:hover svg { transform: translate(3px, -3px); }
+.channels-note { margin-top: 18px; max-width: 46ch; font-family: var(--mono); font-size: 0.8125rem; line-height: 1.6; color: var(--faint); }
 @media (max-width: 559px) {
   .channels a { flex-wrap: wrap; gap: 0 12px; }
   .channels .kind { flex-basis: 100%; }

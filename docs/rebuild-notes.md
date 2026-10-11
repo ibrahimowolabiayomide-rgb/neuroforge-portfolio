@@ -39,3 +39,27 @@ Unchanged from Phase 2 apart from the fallback page that `lib/contact.js` return
 - Scroll-linked effects use CSS scroll timelines, which Chromium and Safari support. Other browsers get the same layout without those effects.
 - The rate limiter is in memory, so on serverless hosting it is best effort.
 - The header and footer are repeated in each HTML file.
+
+# Phase 4: brand and motion
+
+## Brand
+
+The owner's name now leads: header, hero eyebrow, footer, page titles, metadata, structured data and the social image. Neuroforge stays as the working name of the practice (a quiet label beside the name in the header on wide screens, "Works as" in the About ledger, the alternate name in structured data). The location was removed from every branding position, and nothing replaces it: no new city and no remote-work claim. See `brand-notes.md`.
+
+## New motion
+
+| Technique | Where | Notes |
+|---|---|---|
+| Scroll-scrubbed word brightening | Introduction and case "problem" statements | CSS view timeline on each word mask. The mask is the subject because an element with overflow hidden is its own scroll container. |
+| Drifting chapter light and title | Home chapters | View timelines. `.chapter` uses `overflow: clip` so they can run. |
+| Signal pulse and station pings | Hero pipeline | Runs only while `.is-live` |
+| Current and camera sweep | Site plan | Marching dashes on the electric line, rotating cone |
+| Staggered mark pop | Capability matrix | Row and column delay |
+| Pointer glow, eased depth | Hero | One rAF loop that stops when settled |
+| Magnetic buttons, card spotlight, tilt | Buttons, Veyra layers, flow cards, Veyra and Amoura visuals | Fine pointers only. Targets are set in JS, easing is CSS. |
+| Spreading theme change | Theme switch | Same-document view transition, circle from the button, skipped for reduced motion |
+| Held header between pages | All pages | `view-transition-name` on the header |
+| Menu stagger, field nudge, button shimmer, drawn success mark | Navigation and form | |
+
+Rules kept: transforms, opacity and individual transform properties only, no wheel or touch listeners, no smooth-scroll, content visible without JavaScript, nothing animates in reduced motion, nothing loops off screen.
+

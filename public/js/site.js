@@ -20,11 +20,27 @@
   if (toggle) {
     toggle.hidden = false;
     paintToggle();
-    toggle.addEventListener('click', function () {
+    var button = toggle;
+    button.addEventListener('click', function () {
       var next = currentTheme() === 'light' ? 'dark' : 'light';
-      root.setAttribute('data-theme', next);
+      var apply = function () {
+        root.setAttribute('data-theme', next);
+        paintToggle();
+      };
       try { localStorage.setItem('neuroforge-theme', next); } catch (e) { /* storage unavailable */ }
-      paintToggle();
+
+      // Where the browser can, the new theme spreads outward from the button. Everywhere else
+      // (and for visitors who reduce motion) the theme simply changes.
+      var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var vt = /** @type {any} */ (document).startViewTransition;
+      if (calm || typeof vt !== 'function') { apply(); return; }
+      var box = button.getBoundingClientRect();
+      root.style.setProperty('--tx', Math.round(box.left + box.width / 2) + 'px');
+      root.style.setProperty('--ty', Math.round(box.top + box.height / 2) + 'px');
+      root.classList.add('theme-vt');
+      var run = vt.call(document, apply);
+      var done = function () { root.classList.remove('theme-vt'); };
+      if (run && run.finished && typeof run.finished.then === 'function') run.finished.then(done, done); else done();
     });
   }
 
@@ -89,7 +105,7 @@
     if (withEmail) {
       p.appendChild(document.createTextNode(' You can also write to '));
       var a = document.createElement('a');
-      a.href = 'mailto:' + EMAIL_FALLBACK;
+      a.href = 'mailto:' + EMAIL_FALLBACK + '?subject=' + encodeURIComponent('Project enquiry from your portfolio');
       a.textContent = EMAIL_FALLBACK;
       p.appendChild(a);
       p.appendChild(document.createTextNode('.'));

@@ -129,11 +129,194 @@
   }
 
   /* ---------- 5. Page to page ---------- */
+  /* The header keeps its own layer, so it stays put while the page beneath it changes. */
   @view-transition { navigation: auto; }
-  ::view-transition-old(root) { animation: fade-out 180ms ease both; }
-  ::view-transition-new(root) { animation: fade-in 320ms ease both; }
+  .site-header { view-transition-name: site-header; }
+  ::view-transition-old(root) { animation: fade-out 160ms ease both; }
+  ::view-transition-new(root) { animation: page-in 480ms var(--ease-out) both; }
   @keyframes fade-out { to { opacity: 0; } }
-  @keyframes fade-in { from { opacity: 0; } }
+  @keyframes page-in { from { opacity: 0; transform: translateY(14px); } }
+
+  /* ---------- 6. Phase 4: reading and scrolling ---------- */
+
+  /* The introduction statement is read into existence: each word takes its colour as it rises
+     through the lower part of the screen. Words stay readable at every moment (the starting
+     colour is the page's own faint text colour), and without scroll timelines the sentence is
+     simply lit. */
+  @supports (animation-timeline: view()) {
+    /* The mask (.w) is the subject, not the span inside it: an element with overflow hidden is its
+       own scroll container, so a timeline built on something inside it would never run. */
+    .anim .intro-text .w {
+      animation: word-ink linear both;
+      animation-timeline: view();
+      animation-range: cover 12% cover 38%;
+    }
+    /* Only the start is written: the end is whatever colour the word has (ink, or ember for the
+       emphasised words), so the words ignite from a calm neutral that always passes contrast. */
+    @keyframes word-ink { from { color: var(--faint); } }
+
+    /* Each chapter's light drifts against the scroll, and its giant title slides the other
+       way, so the chapters have depth without hijacking the scroll. */
+    .anim .chapter::before { animation: glow-drift linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    @keyframes glow-drift { from { transform: translateY(-6%); } to { transform: translateY(6%); } }
+    .anim .chapter:not(.chapter-amoura) .ch-title { animation: title-drift linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    @keyframes title-drift { from { transform: translateX(2.4vw); } to { transform: translateX(-2.4vw); } }
+  }
+
+  /* The capability marks light up in sequence, row by row, when the table is revealed. */
+  .anim [data-reveal] .matrix .dot {
+    scale: 0;
+    transition: scale 560ms var(--ease-out);
+    transition-delay: calc(240ms + var(--r, 0) * 90ms + var(--c, 0) * 70ms);
+  }
+  .anim [data-reveal].is-in .matrix .dot { scale: 1; }
+  .matrix tbody tr:nth-child(1) { --r: 0; } .matrix tbody tr:nth-child(2) { --r: 1; } .matrix tbody tr:nth-child(3) { --r: 2; }
+  .matrix tbody tr:nth-child(4) { --r: 3; } .matrix tbody tr:nth-child(5) { --r: 4; } .matrix tbody tr:nth-child(6) { --r: 5; }
+  .matrix tbody tr:nth-child(7) { --r: 6; }
+  .matrix tbody td:nth-of-type(2) { --c: 1; } .matrix tbody td:nth-of-type(3) { --c: 2; }
+
+  /* ---------- 7. Phase 4: things that stay alive while they are on screen ---------- */
+  /* motion.js sets .is-live only while the element is visible, so nothing animates off screen. */
+
+  /* Hero pipeline: a pulse of signal travels interface to delivery, and each station answers. */
+  .anim .pipeline.is-live::after {
+    content: "";
+    position: absolute;
+    left: 0; top: -1px;
+    width: 16%; height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, #ffd9a0 62%, #ffffff);
+    animation: signal 6400ms linear infinite;
+    pointer-events: none;
+  }
+  .anim .pipeline.is-live li::after {
+    content: "";
+    position: absolute;
+    top: -5px; left: 0;
+    width: 12px; height: 12px;
+    border: 2px solid var(--ember-fill);
+    border-radius: 50%;
+    opacity: 0;
+    animation: ping 6400ms ease-out infinite;
+    animation-delay: calc(350ms + var(--i, 0) * 1150ms);
+    pointer-events: none;
+  }
+  @keyframes signal { 0% { translate: -100% 0; } 80%, 100% { translate: 625% 0; } }
+  @keyframes signal-y { 0% { translate: 0 -100%; } 80%, 100% { translate: 0 625%; } }
+  @keyframes ping { 0% { opacity: 0.9; scale: 1; } 20%, 100% { opacity: 0; scale: 2.8; } }
+  @media (max-width: 859px) {
+    .anim .pipeline.is-live::after {
+      left: -1px; top: 0;
+      width: 4px; height: 16%;
+      background: linear-gradient(180deg, transparent, #ffd9a0 62%, #ffffff);
+      animation-name: signal-y;
+    }
+    .anim .pipeline.is-live li::after { top: 6px; left: -38px; }
+  }
+
+  /* Site plan: current runs along the electric fence and the camera sweeps the entrance. */
+  .anim [data-live].is-in.is-live .p-electric { animation: current 1500ms linear infinite; }
+  @keyframes current { to { stroke-dashoffset: -9; } }
+  .anim [data-live].is-in.is-live .p-cone {
+    transform-box: view-box;
+    transform-origin: 440px 40px;
+    animation: scan 7000ms ease-in-out 2200ms infinite alternate both;
+  }
+  @keyframes scan { from { rotate: -7deg; } to { rotate: 9deg; } }
+
+  /* ---------- 8. Phase 4: pointer-aware surfaces (fine pointers only, set by motion.js) ---------- */
+
+  /* Buttons lean toward the pointer and pick up a soft light where it is. */
+  .anim .btn-ember, .anim .btn-line { position: relative; isolation: isolate; overflow: hidden; }
+  .anim .btn-ember::before, .anim .btn-line::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(9rem circle at var(--sx, 50%) var(--sy, 50%), color-mix(in srgb, var(--sheen, #ffffff) 28%, transparent), transparent 70%);
+    opacity: 0;
+    transition: opacity var(--t-base) ease;
+  }
+  .anim .btn-line { --sheen: var(--text); }
+  .anim .btn-ember:hover::before, .anim .btn-line:hover::before,
+  .anim .btn-ember:focus-visible::before, .anim .btn-line:focus-visible::before { opacity: 1; }
+
+  /* Cards carry a spotlight that follows the pointer. */
+  .anim .layer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(11rem circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.11), transparent 70%);
+    opacity: 0;
+    transition: opacity var(--t-base) ease;
+  }
+  .anim .layer:hover::after { opacity: 1; }
+  .anim .flow li::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(11rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--cx, var(--ember)) 16%, transparent), transparent 70%);
+    opacity: 0;
+    transition: opacity var(--t-base) ease;
+  }
+  .anim .flow li:hover::before { opacity: 1; }
+
+  /* The product visuals tilt a few degrees toward the pointer. --px and --py run from -0.5 to 0.5. */
+  .layers[data-tilt] { transform: perspective(1100px) rotateY(calc(var(--px, 0) * -7deg)) rotateX(calc(var(--py, 0) * 5deg)); transition: transform 700ms var(--ease-out); }
+  .sheets[data-tilt] { translate: calc(var(--px, 0) * 16px) calc(var(--py, 0) * 8px); rotate: calc(var(--px, 0) * 2deg); transition: translate 700ms var(--ease-out), rotate 700ms var(--ease-out); }
+
+  /* The hero light that follows the pointer (created by motion.js). */
+  .hero-glow {
+    position: absolute;
+    z-index: -1;
+    left: 0; top: 0;
+    width: 38rem; height: 38rem;
+    margin: -19rem 0 0 -19rem;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255, 107, 58, 0.17), rgba(255, 107, 58, 0.05) 58%, transparent 74%);
+    pointer-events: none;
+    will-change: translate;
+  }
+  .anim .hero-glow { opacity: 0; transition: opacity 800ms ease; }
+  .anim .hero.is-aware .hero-glow { opacity: 1; }
+
+  /* ---------- 9. Phase 4: interface feedback ---------- */
+
+  /* Theme switch: the new theme spreads outward from the button (same-document view transition). */
+  :root.theme-vt::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
+  :root.theme-vt::view-transition-new(root) { animation: theme-reveal 780ms var(--ease-in-out) both; mix-blend-mode: normal; }
+  @keyframes theme-reveal {
+    from { clip-path: circle(0 at var(--tx, 50%) var(--ty, 0)); }
+    to   { clip-path: circle(150vmax at var(--tx, 50%) var(--ty, 0)); }
+  }
+
+  /* Mobile menu: links settle in one after another. */
+  @media (max-width: 859px) {
+    .nav-panel:not([hidden]) .nav-list li { animation: menu-in 460ms var(--ease-out) both; }
+    .nav-panel:not([hidden]) .nav-list li:nth-child(2) { animation-delay: 45ms; }
+    .nav-panel:not([hidden]) .nav-list li:nth-child(3) { animation-delay: 90ms; }
+    .nav-panel:not([hidden]) .nav-list li:nth-child(4) { animation-delay: 135ms; }
+    .nav-panel:not([hidden]) .nav-list li:nth-child(5) { animation-delay: 180ms; }
+  }
+  @keyframes menu-in { from { opacity: 0; translate: 0 -10px; } }
+
+  /* Forms: a field with an error gives one short nudge, a pending button shimmers, and the
+     success mark draws itself. */
+  .field [aria-invalid="true"] { animation: nudge 380ms var(--ease-out) both; }
+  @keyframes nudge { 0%, 100% { translate: 0 0; } 20% { translate: -6px 0; } 45% { translate: 5px 0; } 70% { translate: -3px 0; } }
+  .btn[aria-disabled="true"] {
+    background-image: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.38) 50%, transparent 65%);
+    background-size: 230% 100%;
+    animation: shimmer 1200ms linear infinite;
+  }
+  @keyframes shimmer { from { background-position: 125% 0; } to { background-position: -125% 0; } }
+  .sent-check circle { stroke-dasharray: 1; animation: draw-line 720ms var(--ease-in-out) both; }
+  .sent-check path { stroke-dasharray: 1; animation: draw-line 520ms var(--ease-in-out) 560ms both; }
 }
 
 /* Without scroll timelines the step connector is simply drawn. */

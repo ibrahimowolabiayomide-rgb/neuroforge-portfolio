@@ -1,4 +1,4 @@
-# Neuroforge portfolio
+# Ibrahim Owolabi, portfolio (Neuroforge)
 
 A static portfolio site with a real contact form. Plain HTML, CSS and a few small scripts. No framework, no build step and no analytics.
 
@@ -17,16 +17,16 @@ public/                    everything served to visitors (Vercel output director
   css/case.css             case study pages
   css/motion.css           the whole animation system (see docs/rebuild-notes.md)
   js/theme-init.js         applies the saved or system theme before first paint, gates animation
-  js/motion.js             decides when things animate (reveals, step marker, pointer depth)
+  js/motion.js             decides when things animate (reveals, step marker, ambient loops, pointer effects)
   js/nav.js                mobile menu and the current-section marker
-  js/site.js               theme toggle and the contact form
+  js/site.js               theme toggle (with the spreading theme change) and the contact form
   assets/fonts, assets/img self-hosted fonts (with licences) and optimised images
 api/contact.js             Vercel serverless function for the contact form
 lib/contact.js             the form logic: validation, abuse controls, Resend call
 server.js                  local development server (not deployed)
 test/contact.test.js       tests for the contact logic
 test/site.test.js          static checks over public/: links, copy rules, CSP safety, motion safety
-docs/                      rebuild notes, evidence ledger, content removed in the rebuild
+docs/                      rebuild notes, brand notes, evidence ledger, content removed in the rebuild
 ```
 
 The pages are plain HTML files. The header and footer are repeated in each one, so a change to the navigation has to be made in all five pages.
@@ -67,3 +67,12 @@ Push to the connected GitHub repository. Vercel serves `public/` and deploys `ap
 ## Animation and accessibility
 
 Motion is progressive. Hidden starting states only exist while `<html class="anim">` is set, which `theme-init.js` does only for visitors who allow motion, and removes after four seconds if `motion.js` never started. With JavaScript off, with reduced motion, or if a script fails, every section is simply visible. Scrolling is never intercepted. Scroll-linked effects (progress bar, hero drift, step connector) use CSS scroll and view timelines and are an enhancement for browsers that support them.
+
+### Phase 4 motion (all optional, all off for reduced motion)
+
+- Scroll-driven: the introduction statement brightens word by word, chapter lights and giant titles drift against the scroll. Chromium and Safari only; other browsers show the finished state.
+- Ambient loops that run only while on screen (`data-live`): a signal pulse along the hero pipeline, current along the electric fence and a sweeping camera on the site plan.
+- Fine pointers only: a soft light that follows the pointer in the hero, buttons that lean toward the pointer, card spotlights, and gentle tilt on the Veyra layers and the Amoura sheets.
+- Interface feedback: the theme change spreads outward from the switch (View Transitions), the header holds still between pages, mobile menu links settle in one by one, invalid fields nudge once, a pending button shimmers and the success mark draws itself.
+
+To change the name used across the site, search the repository for `Ibrahim Owolabi`: it appears in the five HTML pages, `test/site.test.js`, this file, `docs/` and the social image (`public/assets/img/og.png`, redraw it after a change).

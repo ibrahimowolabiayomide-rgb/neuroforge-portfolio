@@ -235,6 +235,8 @@ a:hover { color: var(--text); text-decoration-thickness: 2px; }
 }
 .nowrap { white-space: nowrap; }
 
+::selection { background: var(--ember-fill); color: var(--on-ember); }
+
 /* ---------- Typography ---------- */
 .eyebrow {
   display: flex;
