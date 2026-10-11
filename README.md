@@ -1,4 +1,4 @@
-# Ibrahim Owolabi, portfolio (Neuroforge)
+# Neuroforge portfolio
 
 A static portfolio site with a real contact form. Plain HTML, CSS and a few small scripts. No framework, no build step and no analytics.
 
@@ -74,5 +74,3 @@ Motion is progressive. Hidden starting states only exist while `<html class="ani
 - Ambient loops that run only while on screen (`data-live`): a signal pulse along the hero pipeline, current along the electric fence and a sweeping camera on the site plan.
 - Fine pointers only: a soft light that follows the pointer in the hero, buttons that lean toward the pointer, card spotlights, and gentle tilt on the Veyra layers and the Amoura sheets.
 - Interface feedback: the theme change spreads outward from the switch (View Transitions), the header holds still between pages, mobile menu links settle in one by one, invalid fields nudge once, a pending button shimmers and the success mark draws itself.
-
-To change the name used across the site, search the repository for `Ibrahim Owolabi`: it appears in the five HTML pages, `test/site.test.js`, this file, `docs/` and the social image (`public/assets/img/og.png`, redraw it after a change).

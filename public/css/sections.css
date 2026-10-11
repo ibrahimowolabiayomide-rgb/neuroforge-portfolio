@@ -328,9 +328,11 @@
 .about { background: var(--bg); }
 .about-grid { display: grid; gap: 56px; }
 @media (min-width: 900px) {
-  .about-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(48px, 7vw, 112px); align-items: center; }
+  .about-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(48px, 7vw, 112px); align-items: start; }
 }
 .portrait { position: relative; max-width: 24rem; margin-right: 16px; }
+/* The text beside it is long, so on wide screens the portrait stays in view while it is read. */
+@media (min-width: 900px) { .portrait { position: sticky; top: calc(var(--header-h) + 40px); } }
 .portrait-frame { position: relative; }
 .portrait-frame::before {
   content: "";
@@ -384,7 +386,6 @@
 .channels .value { flex: 1; min-width: 0; overflow-wrap: break-word; }
 .channels svg { width: 16px; height: 16px; flex: none; opacity: 0.8; transition: transform var(--t-base) var(--ease-out); }
 .channels a:hover svg { transform: translate(3px, -3px); }
-.channels-note { margin-top: 18px; max-width: 46ch; font-family: var(--mono); font-size: 0.8125rem; line-height: 1.6; color: var(--faint); }
 @media (max-width: 559px) {
   .channels a { flex-wrap: wrap; gap: 0 12px; }
   .channels .kind { flex-basis: 100%; }

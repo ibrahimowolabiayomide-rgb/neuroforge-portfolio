@@ -1,33 +1,27 @@
 # Brand notes
 
-## Recommendation
+## Decision
 
-Lead with the owner's name and a plain professional title. Keep Neuroforge as the working name.
+Neuroforge is the single brand. The site shows no personal name and no personal location.
 
 | Where | Now |
 |---|---|
-| Header | Ibrahim Owolabi, with Neuroforge as a quiet label on wide screens |
-| Hero eyebrow | Ibrahim Owolabi, full-stack developer |
-| Page title | Ibrahim Owolabi, full-stack developer |
-| Structured data | Person, name Ibrahim Owolabi, alternate name Neuroforge, job title Full-stack developer, no address |
-| Footer | Ibrahim Owolabi, "Full-stack developer, working as Neuroforge." |
+| Header and footer | Neuroforge |
+| Hero eyebrow | Full-stack developer |
+| Page title | Neuroforge, full-stack developer |
+| Structured data | Person, name Neuroforge, job title Full-stack developer, no address |
+| Social image | Neuroforge wordmark, the headline, "Full-stack developer" |
+| Contact drafts | Open with "Hello," and mention the Neuroforge portfolio |
 
-Why this works for recruiters, international companies, startups and clients:
+## What stays because it is a real contact detail
 
-- A name is searchable and memorable, and it is what a recruiter types into a search box. A studio name alone makes people wonder who is behind it.
-- "Full-stack developer" is supported by the work shown: interface, server and data layers in Veyra and the Imperial site.
-- Neuroforge keeps the identity already built (the N mark, the hero copy, the contact form wording) without hiding the person.
-- Saying nothing about where the owner is based avoids both a local-only reading and an unsupported claim. The site also states "Available for freelance projects and full-time roles" without a place or a work arrangement.
-
-## Where the source of the name comes from
-
-`package.json` lists the author as Ibrahim Owolabi. If you prefer another form (for example with Ayomide, or the other order), search for `Ibrahim Owolabi` and replace it everywhere, then redraw `public/assets/img/og.png`.
+The email address, GitHub handle and LinkedIn address contain the owner's name by nature. They are the working links and were not changed. A test (`no personal name anywhere in the public site`) catches a capitalised name in copy, titles, metadata, alt text or scripts.
 
 ## Left unchanged on purpose
 
 - The Imperial Shelter-Tech Konsult description says the business is in Ibadan. That is the client's trading location, not the owner's branding, and removing it would change a project fact.
-- The favicon, apple touch icon and brand mark are still the N of Neuroforge. A monogram of the name would be a new logo, which is a design decision for the owner.
 - Domain and repository names (neuroforge-portfolio) are unchanged, so links, canonical URLs and the sitemap keep working.
+- `package.json` still lists the author name. It is not shown on the site.
 
 ## Not claimed
 

@@ -42,23 +42,6 @@
   text-decoration: none;
 }
 .brand:hover { color: var(--text); text-decoration: none; }
-.brand-name { white-space: nowrap; }
-/* The studio name stays visible as a quiet label once there is room for it. */
-.brand-sub { display: none; }
-@media (min-width: 1100px) {
-  .brand-sub {
-    display: inline-block;
-    margin-left: 4px;
-    padding-left: 14px;
-    border-left: 1px solid var(--line);
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    line-height: 1.6;
-    color: var(--faint);
-  }
-}
 .brand-mark { width: 28px; height: 28px; flex: none; }
 .brand-mark rect { fill: var(--ember-fill); }
 .brand-mark path { fill: none; stroke: var(--on-ember); stroke-width: 3; stroke-linecap: square; }
@@ -132,8 +115,8 @@
   .nav-list a[aria-current] { color: var(--ember); }
 }
 
-/* Phones and small tablets: keep brand, theme switch and menu on one row. */
-@media (max-width: 599px) {
+/* Narrow phones: keep brand, theme switch and menu on one row. */
+@media (max-width: 479px) {
   .site-header .wrap { gap: 8px; }
   .brand { font-size: 1.125rem; gap: 8px; }
   .brand-mark { width: 26px; height: 26px; }
@@ -143,22 +126,6 @@
 @media (max-width: 359px) {
   .brand { font-size: 1rem; gap: 6px; }
   .theme-toggle { padding: 0 8px; }
-}
-/* Very narrow phones: the theme switch becomes an icon, like the menu button, so the brand,
-   switch and menu all stay on one row. The text stays in the button for screen readers. */
-@media (max-width: 399px) {
-  .theme-toggle { position: relative; width: 44px; padding: 0; font-size: 0; }
-  .theme-toggle::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: 16px;
-    height: 16px;
-    border: 2px solid currentColor;
-    border-radius: 50%;
-    background: linear-gradient(90deg, currentColor 50%, transparent 50%);
-  }
 }
 @media (max-width: 419px) {
   .nav-toggle .label { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

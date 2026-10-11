@@ -198,9 +198,9 @@ test('the old stylesheet is gone and nothing references it', () => {
 });
 
 // ---------------------------------------------------------------------------------------------
-// Branding: the owner's name leads, and no personal location is used as brand identity.
+// Branding: Neuroforge is the only brand. No personal name and no personal location in the public site.
 // ---------------------------------------------------------------------------------------------
-const NAME = 'Ibrahim Owolabi';
+const BRAND = 'Neuroforge';
 
 test('no personal location in branding: every Ibadan mention is the Imperial client description', () => {
   const texts = files.filter((f) => /\.(html|css|js|xml|txt|svg|json)$/.test(f));
@@ -219,31 +219,49 @@ test('no personal location in branding: every Ibadan mention is the Imperial cli
   }
 });
 
-test('the owner name is the primary brand in titles, metadata and the header', () => {
+test('no personal name anywhere in the public site (the real handles in contact links are the only exception)', () => {
+  // The email address, GitHub handle and LinkedIn address contain the owner's name by nature. They are lowercase,
+  // so a capitalised name in copy, titles, metadata, alt text or scripts is caught here.
+  for (const f of files.filter((x) => /\.(html|css|js|xml|txt|svg|json)$/.test(x))) {
+    const text = read(f);
+    assert.ok(!/Ibrahim|Owolabi|Ayomide/.test(text), `${rel(f)}: personal name found`);
+  }
+});
+
+test('Neuroforge is the brand in titles, metadata and the header', () => {
   for (const f of pages) {
     const html = read(f);
     const title = (html.match(/<title>([^<]+)<\/title>/) || [])[1] || '';
-    assert.ok(title.includes(NAME), `${rel(f)}: title lacks the name: ${title}`);
-    assert.ok(html.includes(`<meta name="author" content="${NAME}">`), `${rel(f)}: author`);
-    assert.ok(html.includes(`aria-label="${NAME}, home"`), `${rel(f)}: brand label`);
-    assert.ok(/class="brand-name">Ibrahim Owolabi</.test(html), `${rel(f)}: header name`);
+    assert.ok(title.includes(BRAND), `${rel(f)}: title lacks the brand: ${title}`);
+    assert.ok(html.includes(`<meta name="author" content="${BRAND}">`), `${rel(f)}: author`);
+    assert.ok(html.includes(`aria-label="${BRAND}, home"`), `${rel(f)}: brand label`);
+    assert.ok(/class="brand-mark"[\s\S]*?<span>Neuroforge<\/span>/.test(html), `${rel(f)}: header wordmark`);
     if (!/noindex/.test(html)) {
-      assert.ok(html.includes(`<meta property="og:site_name" content="${NAME}">`), `${rel(f)}: og:site_name`);
-      assert.ok(new RegExp(`og:image:alt" content="${NAME}`).test(html), `${rel(f)}: og:image:alt`);
+      assert.ok(html.includes(`<meta property="og:site_name" content="${BRAND}">`), `${rel(f)}: og:site_name`);
+      assert.ok(new RegExp(`og:image:alt" content="${BRAND}`).test(html), `${rel(f)}: og:image:alt`);
     }
   }
 });
 
-test('structured data is valid JSON, names the owner and carries no address', () => {
+test('structured data is valid JSON, names the brand and carries no address', () => {
   const html = read(path.join(PUBLIC, 'index.html'));
   const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
   assert.ok(m, 'ld+json present');
   const data = JSON.parse(m[1]);
   assert.equal(data['@type'], 'Person');
-  assert.equal(data.name, NAME);
-  assert.equal(data.alternateName, 'Neuroforge');
+  assert.equal(data.name, BRAND);
   assert.ok(!('address' in data), 'no address in structured data');
   assert.ok(typeof data.jobTitle === 'string' && /developer/i.test(data.jobTitle));
+});
+
+test('the About section is written out in full', () => {
+  const html = read(path.join(PUBLIC, 'index.html'));
+  const about = html.slice(html.indexOf('id="about"'), html.indexOf('id="contact"'));
+  const prose = about.slice(about.indexOf('class="prose"'), about.indexOf('</dl>'));
+  const paragraphs = (prose.match(/<p>/g) || []).length;
+  assert.ok(paragraphs >= 5, `expected at least five paragraphs, found ${paragraphs}`);
+  for (const row of ['Practice', 'Studying', 'Focus', 'Main tools', 'Work', 'Available for']) assert.ok(about.includes(`<dt>${row}</dt>`), `ledger row ${row}`);
+  assert.ok(!/Based in/.test(about), 'no location row');
 });
 
 test('the social preview image is 1200 by 630', () => {
@@ -286,7 +304,7 @@ test('contact links keep the owner\'s real addresses and open drafts the visitor
   assert.equal(decodeURIComponent(mail.pathname), 'ibrahimowolabiayomide@gmail.com');
   assert.match(mail.searchParams.get('subject'), /enquiry/i);
   const body = mail.searchParams.get('body');
-  assert.match(body, /^Hello Ibrahim,/);
+  assert.match(body, /^Hello,/);
   assert.match(body, /portfolio/);
   assert.match(body, /Kind regards,\s*$/);
 
@@ -297,7 +315,7 @@ test('contact links keep the owner\'s real addresses and open drafts the visitor
   assert.equal(tg.origin + tg.pathname, 'https://t.me/L0p3r7');
   for (const u of [wa, tg]) {
     const text = u.searchParams.get('text');
-    assert.match(text, /^Hello Ibrahim,/);
+    assert.match(text, /^Hello, /);
     assert.match(text, /project/);
     assert.ok(text.length > 40 && text.length < 400, 'short enough to read before sending');
     assert.ok(!/sent|has been sent/i.test(text), 'the draft never claims to be sent');
@@ -309,9 +327,9 @@ test('contact links keep the owner\'s real addresses and open drafts the visitor
   assert.equal(links.GitHub, 'https://github.com/ibrahimowolabiayomide-rgb');
 });
 
-test('the page says drafts are not sent automatically', () => {
-  const html = read(path.join(PUBLIC, 'index.html'));
-  assert.match(html, /class="channels-note">[^<]*Nothing is sent until you press send/);
+test('the contact list carries no explanatory note', () => {
+  assert.ok(!/channels-note/.test(read(path.join(PUBLIC, 'index.html'))));
+  assert.ok(!/channels-note/.test(read(path.join(PUBLIC, 'css', 'sections.css'))));
 });
 
 test('the form fallback link in site.js uses the same address and subject', () => {

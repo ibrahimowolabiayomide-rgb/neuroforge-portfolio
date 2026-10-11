@@ -44,7 +44,7 @@ Unchanged from Phase 2 apart from the fallback page that `lib/contact.js` return
 
 ## Brand
 
-The owner's name now leads: header, hero eyebrow, footer, page titles, metadata, structured data and the social image. Neuroforge stays as the working name of the practice (a quiet label beside the name in the header on wide screens, "Works as" in the About ledger, the alternate name in structured data). The location was removed from every branding position, and nothing replaces it: no new city and no remote-work claim. See `brand-notes.md`.
+Neuroforge is the only brand: header, hero, footer, page titles, metadata, structured data and the social image. No personal name appears anywhere in the public copy, and the location was removed from every branding position with nothing in its place: no new city and no remote-work claim. The About section was written out in full from facts already on the site. See `brand-notes.md`.
 
 ## New motion
 

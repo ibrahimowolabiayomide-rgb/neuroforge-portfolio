@@ -15,7 +15,6 @@ Where each claim on the site comes from. The three project codebases were not av
 | Imperial: ready for hand-over, with email sending domain and search indexing waiting on the production domain | Owner's notes | No |
 | Tools listed under "Also in the toolkit" and in the hero pipeline | Owner's notes | No |
 | Building since 2020, studying Computer Science | Owner's notes | n/a |
-| The owner's name, Ibrahim Owolabi, as the primary brand | `author.name` in `package.json` (owner's own project file) | n/a |
 | Contact details, social links | Owner's notes | Links not opened from the build environment |
 
 Removed in earlier phases and still absent: employment history, certifications, testimonials, metrics, client logos and job titles that could not be confirmed. See `removed-unverified-content.md`.
